@@ -1,53 +1,29 @@
-import { useEffect, useState } from "react";
-import { MobileNavigation } from "@/components/layout/MobileNavigation";
-import { Preloader } from "@/components/layout/Preloader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { TopBar } from "@/components/layout/TopBar";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { ClosingCtaSection } from "@/components/sections/ClosingCtaSection";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { MetalsSection } from "@/components/sections/MetalsSection";
-import { PartnerLogosSection } from "@/components/sections/PartnerLogosSection";
-import { ProcessSection } from "@/components/sections/ProcessSection";
-import { QualificationSection } from "@/components/sections/QualificationSection";
-import { WhyChooseSection } from "@/components/sections/WhyChooseSection";
-import { useHeaderScroll } from "@/hooks/useHeaderScroll";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { SiteShell } from "@/components/layout/SiteShell";
+import { ArticlePage } from "@/pages/ArticlePage";
+import { ContactPage } from "@/pages/ContactPage";
+import { GetStartedPage } from "@/pages/GetStartedPage";
+import { HomePage } from "@/pages/HomePage";
+import { NewsPage } from "@/pages/NewsPage";
+import { PreciousMetalsIraPage } from "@/pages/PreciousMetalsIraPage";
+import { PrivacyNoticePage } from "@/pages/PrivacyNoticePage";
 
 export function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const header = useHeaderScroll();
-  useScrollReveal();
-
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMenuOpen]);
-
   return (
-    <>
-      <Preloader />
-      <TopBar hidden={header.isTopBarHidden} />
-      <SiteHeader
-        top={header.headerTop}
-        scrolled={header.isHeaderScrolled}
-        onOpenMenu={() => setIsMenuOpen(true)}
-      />
-      <MobileNavigation open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <main>
-        <HeroSection />
-        <PartnerLogosSection />
-        <QualificationSection />
-        <ProcessSection />
-        <WhyChooseSection />
-        <MetalsSection />
-        <AboutSection />
-        <ClosingCtaSection />
-      </main>
-      <SiteFooter />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<SiteShell />}>
+          <Route index element={<HomePage />} />
+          <Route path="precious-metals-ira" element={<PreciousMetalsIraPage />} />
+          <Route path="news" element={<NewsPage />} />
+          <Route path="news/:slug" element={<ArticlePage />} />
+          <Route path=":year/:month/:day/:slug" element={<ArticlePage />} />
+          <Route path="contact-us" element={<ContactPage />} />
+          <Route path="get-started-now" element={<GetStartedPage />} />
+          <Route path="privacy-notice" element={<PrivacyNoticePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

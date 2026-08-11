@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-11T13:12:00+05:45",
+  "title": "Design System: Oaksors",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Mineral Emerald", "canonical": "#1eba97", "tonalRamp": ["#06382f", "#0b594a", "#0f725f", "#118f75", "#1eba97", "#47cbaa", "#7ee1c4", "#d7f8ec"] },
+      "night": { "role": "neutral", "displayName": "Reserve Night", "canonical": "#0b1110", "tonalRamp": ["#050807", "#0b1110", "#18201e", "#35413e", "#697571", "#9fa9a6", "#d4dad8", "#f3f6f5"] },
+      "mist": { "role": "neutral", "displayName": "Cool Mist", "canonical": "#f2f7f5", "tonalRamp": ["#15221e", "#2c413a", "#527167", "#7ea096", "#aac8bf", "#cde0da", "#e4efeb", "#f2f7f5"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Direct Display", "purpose": "Page heroes and primary section headlines." },
+      "body": { "displayName": "Calm Utility", "purpose": "Navigation, UI, marketing copy, and forms." },
+      "editorial": { "displayName": "Long-form Editorial", "purpose": "Article paragraphs and quotations." }
+    },
+    "shadows": [
+      { "name": "form-ambient", "value": "0 18px 55px rgb(15 56 46 / 7%)", "purpose": "Lifts important read-only form previews from mist backgrounds." }
+    ],
+    "motion": [
+      { "name": "state-standard", "value": "0.3s ease", "purpose": "Button, navigation, and image hover states." },
+      { "name": "reveal", "value": "1.4s cubic-bezier(0.25, 1, 0.5, 1)", "purpose": "Existing homepage scroll reveals." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "767px" },
+      { "name": "tablet", "value": "1023px" },
+      { "name": "desktop-nav", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Compact, confident action used on dark fields.",
+      "html": "<button class=\"ds-button-primary\">GET STARTED</button>",
+      "css": ".ds-button-primary{height:48px;padding:0 28px;border:0;border-radius:10px;background:#fff;color:#0b1110;font:500 15px 'GT Standard',system-ui,sans-serif;transition:background .3s ease}.ds-button-primary:hover{background:#e5e7eb}.ds-button-primary:focus-visible{outline:3px solid rgba(30,186,151,.45);outline-offset:3px}"
+    },
+    {
+      "name": "Form Field",
+      "kind": "input",
+      "description": "Quiet paper input for secure workflows and previews.",
+      "html": "<label class=\"ds-field\">Email address<input type=\"email\" placeholder=\"name@example.com\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;color:#394743;font:13px 'GT Standard',system-ui,sans-serif}.ds-field input{min-height:50px;padding:13px 14px;border:1px solid #d5dfdc;border-radius:9px;background:#f7faf9;color:#43504d;font:inherit}.ds-field input:focus-visible{outline:3px solid rgba(30,186,151,.22);border-color:#1eba97}"
+    },
+    {
+      "name": "Editorial Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Paper panel with a cool line and generous internal space.",
+      "html": "<article class=\"ds-card\"><small>MARKET OUTLOOK</small><h3>Perspective for changing markets.</h3><p>Clear context for a more informed conversation.</p></article>",
+      "css": ".ds-card{max-width:420px;padding:34px;border:1px solid #dfe7e4;border-radius:22px;background:#fff;color:#0b1110;font-family:'GT Standard',system-ui,sans-serif}.ds-card small{color:#0f725f;letter-spacing:.12em}.ds-card h3{margin:18px 0 12px;font-size:28px;font-weight:400;letter-spacing:-.035em}.ds-card p{color:#43504d;line-height:1.65}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tangible Reserve",
+    "overview": "Large dark fields establish seriousness; bright paper sections support comprehension; emerald is reserved for direction, status, and brand emphasis. Precious-metals imagery supplies tangible evidence while generous spacing keeps the experience calm.",
+    "keyCharacteristics": ["High-contrast opening surfaces", "Direct low-weight display typography", "Emerald as a signal", "Restrained depth", "Clear non-pressuring actions"],
+    "rules": [
+      { "name": "The Signal Rule", "body": "Emerald marks emphasis, active navigation, confirmation, and directional links; it does not fill every card or compete with content.", "section": "colors" },
+      { "name": "The Reading-Order Rule", "body": "Responsive layouts preserve headline, explanation, action, and proof in that order.", "section": "layout" }
+    ],
+    "dos": ["Use physical precious-metals imagery as visual proof.", "Vary dark, paper, and mist sections.", "Keep legal and article columns narrow.", "State unavailable interactions explicitly."],
+    "donts": ["Fabricate performance claims or testimonials.", "Turn every surface into glass.", "Collect sensitive data without an approved backend.", "Overuse emerald fills."]
+  }
+}

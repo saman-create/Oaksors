@@ -1,6 +1,6 @@
 # Oaksors
 
-Oaksors’ precious-metals IRA marketing site, built with React, Vite, TypeScript, Tailwind CSS, and selectively adopted Untitled UI foundations.
+Oaksors' precious-metals IRA website, built with React, Vite, TypeScript, Tailwind CSS, React Aria Components, and selectively adopted Untitled UI foundations.
 
 ## Development
 
@@ -12,19 +12,63 @@ npm run dev
 ## Quality checks
 
 ```bash
+npm run typecheck
 npm test
 npm run lint
 npm run build
 ```
 
+## Routes
+
+- `/` — redesigned homepage
+- `/precious-metals-ira/` — IRA education and live-metal reference widgets
+- `/news/` — API-ready news index
+- `/news/:slug/` — reusable article template
+- `/:year/:month/:day/:slug/` — compatibility route for existing article URLs
+- `/contact-us/` — company details and disabled qualification form
+- `/get-started-now/` — onboarding preview with disabled sensitive-data form
+- `/privacy-notice/` — structured privacy notice
+
+## News API contract
+
+Set `VITE_NEWS_API_URL` to connect a dedicated API. When it is omitted or unavailable, the site renders the local example article from `src/data/news.ts`.
+
+The frontend calls:
+
+- `GET {VITE_NEWS_API_URL}/articles`
+- `GET {VITE_NEWS_API_URL}/articles/{slug}`
+
+Both endpoints use this article shape:
+
+```ts
+type NewsArticle = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  publishedAt: string;
+  category: string;
+  image: string;
+  imageAlt: string;
+  readTime: string;
+  source?: { label: string; url: string };
+  body: string; // Plain CRM textarea content; blank lines create paragraphs.
+};
+```
+
+## Form safety
+
+The contact and onboarding forms are intentionally disabled. They do not collect, store, upload, email, or transmit entered information. Connect them only after a reviewed secure backend is available.
+
 ## Project structure
 
-- `src/app` — application composition and integration tests
-- `src/components/layout` — site-wide navigation, header, footer, and loading UI
-- `src/components/sections` — one component per landing-page section
-- `src/components/ui` — owned UI primitives adapted from the Untitled UI architecture
-- `src/hooks` — reusable browser behavior such as header and reveal state
-- `src/styles` — Oaksors design tokens, Tailwind theme, and incumbent visual styles
-- `assets` — fonts, imagery, and video used by the landing page
-
-Untitled UI components are added only as needed. The foundational button primitive uses React Aria Components and retains the existing Oaksors visual styling.
+- `src/app` — routing and application composition
+- `src/pages` — route-level page components
+- `src/components/layout` — shared navigation, header, footer, and loading UI
+- `src/components/common` — reusable page and editorial components
+- `src/components/forms` — accessible, disabled form presentation components
+- `src/components/sections` — homepage sections
+- `src/components/ui` — owned UI primitives adapted from Untitled UI architecture
+- `src/data` — local structured fallback content
+- `src/services` — external API boundaries
+- `src/styles` — design tokens and responsive site styles
+- `assets` — local fonts, imagery, and video
