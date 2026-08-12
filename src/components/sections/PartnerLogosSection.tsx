@@ -6,8 +6,8 @@ export function PartnerLogosSection() {
           Trusted By Industry Leaders
         </p>
         <div className="partner-logos-row scroll-reveal" style={{transitionDelay: '0.15s'}}>
-          <img src="/assets/images/international.png" alt="International Depository Services Group" className="partner-logo" />
-          <img src="/assets/images/entrust.png" alt="Entrust Group" className="partner-logo" />
+          <img src="/assets/images/delaware-depository.webp" alt="Delaware Depository" className="partner-logo" />
+          <img src="/assets/images/preferred-trust.webp" alt="Preferred Trust Company" className="partner-logo" />
           <img src="/assets/images/veteran.png" alt="Veteran Owned Business" className="partner-logo" />
           <img src="/assets/images/trustpilot.png" alt="Trustpilot" className="partner-logo" />
         </div>

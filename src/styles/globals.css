@@ -916,14 +916,14 @@ body {
 }
 
 .partner-logo {
-    height: 67px;
-    width: auto;
-    max-width: 240px;
+    width: 240px;
+    height: 88px;
+    max-width: 25%;
     object-fit: contain;
     opacity: 0.5;
     filter: grayscale(100%);
     transition: opacity 0.3s ease, filter 0.3s ease;
-    padding: 0 40px;
+    padding: 10px 32px;
     border-right: 1px solid rgba(0, 0, 0, 0.18);
 }
 
@@ -942,9 +942,10 @@ body {
     }
     
     .partner-logo {
-        height: 48px;
-        max-width: 170px;
-        padding: 0 24px;
+        width: 50%;
+        height: 72px;
+        max-width: 190px;
+        padding: 10px 22px;
     }
 }
 

@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "oaksorscrm"
+  },
+  "targets": {
+    "oaksorscrm": {
+      "hosting": {
+        "llc": [
+          "oaksorsllc"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

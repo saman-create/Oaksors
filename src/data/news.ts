@@ -17,7 +17,7 @@ export const sampleArticle: NewsArticle = {
   excerpt: "Gold's outlook remains elevated, but future demand and price stability depend on central-bank buying, geopolitical developments, and Federal Reserve policy.",
   publishedAt: "2026-08-06T12:00:00-07:00",
   category: "Market outlook",
-  image: "https://www.oaksorsllc.com/wp-content/uploads/2026/08/gold-bullion-pile-coins-and-bars.jpg",
+  image: "/assets/images/news-gold-bullion.jpg",
   imageAlt: "A pile of gold bullion bars and coins",
   readTime: "4 min read",
   source: { label: "J.P. Morgan Global Research", url: "https://www.jpmorgan.com/insights/global-research/commodities/gold-prices" },

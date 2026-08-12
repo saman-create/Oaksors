@@ -59,7 +59,7 @@ export function PreciousMetalsIraPage() {
             <p>Preferred Trust Company</p>
             <div className="trust-logo-wrap">
               <div className="asset-placeholder"><strong>Preferred Trust Company logo</strong><span>Independent self-directed IRA custodian</span></div>
-              <img src="https://www.oaksorsllc.com/wp-content/uploads/2025/11/Preferred-Trust-Company-logo-1024x1024.jpg" alt="Preferred Trust Company" onError={(event) => { event.currentTarget.hidden = true; }} />
+              <img src="/assets/images/preferred-trust.webp" alt="Preferred Trust Company" onError={(event) => { event.currentTarget.hidden = true; }} />
             </div>
             <span className="text-link">Learn about self-directed IRAs <ArrowIcon /></span>
           </a>
