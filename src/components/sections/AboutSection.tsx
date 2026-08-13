@@ -1,3 +1,5 @@
+import { SocialLinks } from "@/components/common/SocialLinks";
+
 export function AboutSection() {
   return (
     <section id="about" style={{backgroundColor: '#ffffff', padding: '112px 0'}}>
@@ -42,7 +44,7 @@ export function AboutSection() {
                 <p style={{fontSize: 15, color: '#64748b', lineHeight: '1.5', margin: 0, marginBottom: 12}}>
                   Inquire about our services today!
                 </p>
-                <div style={{display: 'flex', gap: 16, color: '#64748b'}}>
+                <SocialLinks className="about-social-links" />{/*
                   <a href="#" aria-label="TikTok" className="about-social-link" style={{color: 'inherit', transition: 'color 0.3s'}}>
                     <svg width={20} height={20} viewBox="0 0 24 24" fill="currentColor">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
@@ -58,14 +60,14 @@ export function AboutSection() {
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                   </a>
-                </div>
+                </div>*/}
               </div>
             </div>
           </div>
           {/* Right Column */}
           <div className="scroll-reveal" style={{flex: '1 1 400px', transitionDelay: '100ms'}}>
             <div style={{backgroundColor: 'rgba(30, 186, 151, 0.1)', borderRadius: 24, padding: 12, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'}}>
-              <img src="/assets/images/senior-couple.png" alt="Senior couple holding gold and silver coins" style={{width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 16, boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)', border: '1px solid rgba(30, 186, 151, 0.2)', display: 'block'}} />
+              <img src="/assets/images/about-oaksors.png" alt="Senior couple holding gold and silver coins" style={{width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 16, boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)', border: '1px solid rgba(30, 186, 151, 0.2)', display: 'block'}} />
             </div>
           </div>
         </div>
@@ -73,3 +75,4 @@ export function AboutSection() {
     </section>
       );
 }
+

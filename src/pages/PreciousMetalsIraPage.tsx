@@ -90,7 +90,13 @@ export function PreciousMetalsIraPage() {
           <div className="metal-widget-grid">
             {metals.map(([name, symbol]) => (
               <article className="metal-widget" key={symbol}>
-                <h3 className="visually-hidden">{name} live price</h3>
+                <div className="metal-widget-header">
+                  <div>
+                    <p className="metal-widget-kicker">Live market pricing</p>
+                    <h3>{name}</h3>
+                  </div>
+                  <span className="metal-widget-status"><i /> Live</span>
+                </div>
                 <iframe title={`${name} live price`} src={`https://goldbroker.com/widget/live/${symbol}?currency=USD&height=320`} />
               </article>
             ))}

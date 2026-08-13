@@ -7,5 +7,6 @@ describe("PartnerLogosSection", () => {
 
     expect(screen.getByRole("img", { name: "Delaware Depository" })).toHaveAttribute("src", "/assets/images/delaware-depository.webp");
     expect(screen.getByRole("img", { name: "Preferred Trust Company" })).toHaveAttribute("src", "/assets/images/preferred-trust.webp");
+    expect(screen.getByRole("img", { name: "Preferred Trust Company BBB Accredited Business" })).toHaveAttribute("src", "/assets/images/preferred-trust-bbb.png");
   });
 });

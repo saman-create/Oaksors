@@ -82,6 +82,22 @@ export function MetalsSection() {
             </p>
           </div>
         </div>
+        <div className="landing-live-metal-grid">
+          {[
+            ["Gold", "XAU"],
+            ["Silver", "XAG"],
+            ["Platinum", "XPT"],
+            ["Palladium", "XPD"],
+          ].map(([name, symbol]) => (
+            <article className="landing-live-metal-card" key={symbol}>
+              <div className="landing-live-metal-head">
+                <div><p>Live market pricing</p><h3>{name}</h3></div>
+                <span><i /> Live</span>
+              </div>
+              <iframe title={`${name} live price`} src={`https://goldbroker.com/widget/live/${symbol}?currency=USD&height=320`} />
+            </article>
+          ))}
+        </div>
       </div>
     </section>
       );

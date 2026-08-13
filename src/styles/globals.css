@@ -225,6 +225,12 @@ body {
     background: rgba(30, 186, 151, 0.15);
 }
 
+.top-bar-social-links { gap: 14px; }
+.top-bar-social-links a { display: inline-flex; color: inherit; font-size: 14px; transition: color 0.2s ease; }
+.top-bar-social-links a:hover { color: #2effd0; }
+.about-social-links { display: flex; gap: 16px; color: #64748b; }
+.about-social-links a { display: inline-flex; color: inherit; font-size: 20px; transition: color 0.3s; }
+
 /* Hide top bar on mobile */
 @media (max-width: 767px) {
     .top-bar {
@@ -936,6 +942,22 @@ body {
     filter: grayscale(0%);
 }
 
+.landing-live-metal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.landing-live-metal-card { overflow: hidden; padding: 24px; color: white; border: 1px solid rgb(255 255 255 / 10%); border-radius: 22px; background: linear-gradient(145deg, #18221f, #0c1412); box-shadow: 0 18px 45px rgb(10 32 26 / 13%); }
+.landing-live-metal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.landing-live-metal-head p { margin-bottom: 7px; color: var(--c-pale-yellow); font-size: 9px; letter-spacing: .11em; text-transform: uppercase; }
+.landing-live-metal-head h3 { color: white; font-size: 27px; font-weight: 400; letter-spacing: -.04em; line-height: 1; }
+.landing-live-metal-head > span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; color: rgb(255 255 255 / 68%); border: 1px solid rgb(30 186 151 / 30%); border-radius: 999px; font-size: 10px; }
+.landing-live-metal-head i { width: 5px; height: 5px; border-radius: 50%; background: var(--c-pale-yellow); box-shadow: 0 0 9px var(--c-pale-yellow); }
+.landing-live-metal-card iframe { display: block; width: calc(100% + 48px); height: 275px; margin: 0 -24px -24px; border: 0; background: #101916; }
+.metals-carousel { display: none !important; }
+
+.partner-logos-row > a { display: contents; }
+
+.partner-logo--bbb {
+    padding-inline: 22px;
+}
+
 @media (max-width: 767px) {
     .partner-logos-row {
         gap: 24px 0;
@@ -946,6 +968,10 @@ body {
         height: 72px;
         max-width: 190px;
         padding: 10px 22px;
+    }
+
+    .partner-logo--bbb {
+        padding-inline: 16px;
     }
 }
 
@@ -1377,6 +1403,9 @@ body {
     .container {
         padding: 0 16px !important;
     }
+
+    .landing-live-metal-grid { display: flex; overflow-x: auto; gap: 16px; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+    .landing-live-metal-card { flex: 0 0 88%; scroll-snap-align: start; }
 
     .qualify-grid {
         grid-template-columns: 1fr !important;

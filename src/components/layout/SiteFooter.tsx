@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { SocialLinks } from "@/components/common/SocialLinks";
 
 const quickLinks = [
   ["Home", "/"],
@@ -15,6 +16,10 @@ export function SiteFooter() {
           <div className="site-footer-brand">
             <Link to="/" aria-label="Oaksors home"><img src="/assets/images/dark-logo.png" alt="Oaksors" /></Link>
             <p>Oaksors is a wholesale precious metals company serving clients internationally and throughout all 50 U.S. states and territories. We believe in a simple, quick, and honest process.</p>
+          </div>
+          <div>
+            <h2>Follow Us</h2>
+            <SocialLinks className="site-footer-social-links" />
           </div>
           <div>
             <h2>Quick Links</h2>
