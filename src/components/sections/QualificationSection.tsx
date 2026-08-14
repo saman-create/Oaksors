@@ -1,8 +1,12 @@
-import { Button } from "@/components/ui/Button";
+import { FormField, TextAreaField } from "@/components/forms/FormField";
+import { DisabledFormNotice } from "@/components/forms/DisabledFormNotice";
 
 export function QualificationSection() {
   return (
-    <section id="qualify" className="content-section bg-dark" style={{background: 'url("/assets/images/actnow-bg.png") center/cover no-repeat'}}>
+    <section id="qualify" className="content-section bg-dark qualification-section">
+      <video className="qualification-section-video" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
+        <source src="/assets/videos/page-hero-background.mp4" type="video/mp4" />
+      </video>
       <div className="container qualify-grid" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start'}}>
         <div className="form-info scroll-reveal">
           <p style={{textTransform: 'uppercase', letterSpacing: 2, opacity: 1, marginBottom: 10, color: 'white'}}>
@@ -64,54 +68,22 @@ export function QualificationSection() {
             </ul>
           </div>
         </div>
-        <div className="form-container scroll-reveal" style={{transitionDelay: '100ms', background: 'var(--c-white)', color: 'var(--c-black)', padding: 40, borderRadius: 8}}>
-          <form className="form-grid" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20}}>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>First Name <span style={{color: 'red'}}>*</span></label>
-              <input type="text" style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required />
-            </div>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Last Name <span style={{color: 'red'}}>*</span></label>
-              <input type="text" style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required />
-            </div>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Cell phone <span style={{color: 'red'}}>*</span></label>
-              <input type="text" style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required />
-            </div>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Email Address <span style={{color: 'red'}}>*</span></label>
-              <input type="email" style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required />
-            </div>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Retired <span style={{color: 'red'}}>*</span></label>
-              <div style={{display: 'flex', gap: 16, marginTop: 12}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: 6}}><input type="radio" name="retired" defaultValue="Yes" required />
-                  Yes</label>
-                <label style={{display: 'flex', alignItems: 'center', gap: 6}}><input type="radio" name="retired" defaultValue="No" required />
-                  No</label>
+        <div className="scroll-reveal mp-form-card" style={{transitionDelay: '100ms'}}>
+          <DisabledFormNotice compact />
+          <form aria-label="Landing qualification preview form">
+            <fieldset disabled>
+              <div className="mp-form-grid">
+                <FormField label="First name" name="firstName" autoComplete="given-name" />
+                <FormField label="Last name" name="lastName" autoComplete="family-name" />
+                <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" />
+                <FormField label="Email Address" name="email" type="email" autoComplete="email" />
+                <FormField label="Retirement status" name="retired"><select id="retired" name="retired" defaultValue=""><option value="">Select an option</option><option>Retired</option><option>Not retired</option></select></FormField>
+                <FormField label="Date of birth" name="dob" type="date" />
+                <TextAreaField label="Please describe your portfolio: assets, account types, and approximate values." name="portfolio" />
+                <TextAreaField label="What are your biggest concerns about your portfolio and retirement?" name="concerns" />
               </div>
-            </div>
-            <div>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Date of Birth <span style={{color: 'red'}}>*</span></label>
-              <input type="date" style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required />
-            </div>
-            <div style={{gridColumn: '1 / -1'}}>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>Please describe your portfolio: Assets, type of accounts,
-                approximate market values, etc.
-                <span style={{color: 'red'}}>*</span></label>
-              <textarea rows={3} style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required defaultValue={""} />
-            </div>
-            <div style={{gridColumn: '1 / -1'}}>
-              <label style={{fontSize: 13, fontWeight: 'bold', color: '#444'}}>What are some of your biggest concerns regarding your
-                portfolio and retirement?
-                <span style={{color: 'red'}}>*</span></label>
-              <textarea rows={3} style={{width: '100%', padding: 12, border: '1px solid #ccc', borderRadius: 4, marginTop: 6}} required defaultValue={""} />
-            </div>
-            <div style={{gridColumn: '1 / -1', marginTop: 10}}>
-              <Button type="button" style={{width: '100%', justifyContent: 'center', height: 48, fontSize: 16}}>
-                REQUEST INFORMATION NOW
-              </Button>
-            </div>
+              <button type="button" className="btn btn-primary btn-lg" disabled>REQUEST INFORMATION NOW</button>
+            </fieldset>
           </form>
         </div>
       </div>
