@@ -998,7 +998,7 @@ body {
 .landing-live-metal-head h3 { color: white; font-size: 25px; font-weight: 400; letter-spacing: -.04em; line-height: 1; }
 .landing-live-metal-head > span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; color: rgb(255 255 255 / 68%); border: 1px solid rgb(30 186 151 / 30%); border-radius: 999px; font-size: 10px; }
 .landing-live-metal-head i { width: 5px; height: 5px; border-radius: 50%; background: var(--c-pale-yellow); box-shadow: 0 0 9px var(--c-pale-yellow); }
-.landing-live-metal-card iframe { display: block; width: calc(100% + 40px); height: 255px; margin: 0 -20px -20px; border: 0; background: #101916; }
+.landing-live-metal-card iframe { display: block; width: calc(100% + 40px); height: 300px; margin: 0 -20px -20px; border: 0; background: #101916; }
 
 @media (min-width: 1440px) {
     .landing-live-metal-grid {
