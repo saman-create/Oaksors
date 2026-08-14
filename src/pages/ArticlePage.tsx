@@ -4,7 +4,7 @@ import { ArrowIcon } from "@/components/common/ArrowIcon";
 import { NewsCard } from "@/components/common/NewsCard";
 import { fallbackArticles, sampleArticle, type NewsArticle } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { getArticle } from "@/services/newsApi";
+import { getArticle, getArticles } from "@/services/newsApi";
 import { BrandPromise } from "@/components/common/BrandPromise";
 
 function ArticleContent({ article }: { article: NewsArticle }) {
@@ -18,6 +18,7 @@ export function ArticlePage() {
     article: slug === sampleArticle.slug ? sampleArticle : null,
     loading: slug !== sampleArticle.slug,
   });
+  const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>(fallbackArticles);
   const article = result.slug === slug ? result.article : null;
   const loading = result.slug !== slug || result.loading;
   usePageMeta(article ? `${article.title} | Oaksors` : "Market Insight | Oaksors", article?.excerpt ?? "Read the latest precious-metals market insight from Oaksors.");
@@ -28,6 +29,10 @@ export function ArticlePage() {
       if (active) setResult({ slug, article: nextArticle, loading: false });
     });
     return () => { active = false; };
+  }, [slug]);
+
+  useEffect(() => {
+    void getArticles().then((articles) => setRelatedArticles(articles.filter((candidate) => candidate.slug !== slug).slice(0, 3)));
   }, [slug]);
 
   if (loading) return <main className="article-status"><div className="container"><p>Loading article…</p></div></main>;
@@ -63,7 +68,7 @@ export function ArticlePage() {
         </div>
       </article>
       <section className="mp-section mp-section--soft related-news">
-        <div className="container"><div className="related-news-heading"><p className="page-eyebrow">Continue reading</p><h2>More market perspective</h2></div><div className="news-grid">{fallbackArticles.map((relatedArticle) => <NewsCard key={relatedArticle.slug} article={relatedArticle} />)}</div></div>
+        <div className="container"><div className="related-news-heading"><p className="page-eyebrow">Continue reading</p><h2>More market perspective</h2></div><div className="news-grid">{relatedArticles.map((relatedArticle) => <NewsCard key={relatedArticle.slug} article={relatedArticle} />)}</div></div>
       </section>
     </main>
   );

@@ -13,5 +13,7 @@ export default defineConfig({
     setupFiles: "./src/test/setup.ts",
     css: true,
     globals: true,
+    include: ["src/**/*.{test,spec}.{js,ts,jsx,tsx}"],
+    exclude: ["node_modules/**", "functions/**"],
   },
 });

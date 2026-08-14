@@ -6,5 +6,7 @@ output/
 .playwright-cli/
 *.local
 *.log
+functions/lib/
+functions/node_modules/
 .DS_Store
 Thumbs.db

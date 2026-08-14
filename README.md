@@ -29,16 +29,9 @@ npm run build
 - `/get-started-now/` — onboarding preview with disabled sensitive-data form
 - `/privacy-notice/` — structured privacy notice
 
-## News API contract
+## News article contract
 
-Set `VITE_NEWS_API_URL` to connect a dedicated API. When it is omitted or unavailable, the site renders the local example article from `src/data/news.ts`.
-
-The frontend calls:
-
-- `GET {VITE_NEWS_API_URL}/articles`
-- `GET {VITE_NEWS_API_URL}/articles/{slug}`
-
-Both endpoints use this article shape:
+The frontend reads `{ articles: NewsArticle[] }` from the Firebase `/api/news` endpoint. When it is unavailable, the site renders the local example article from `src/data/news.ts`.
 
 ```ts
 type NewsArticle = {
@@ -51,7 +44,9 @@ type NewsArticle = {
   imageAlt: string;
   readTime: string;
   source?: { label: string; url: string };
-  body: string; // Plain CRM textarea content; blank lines create paragraphs.
+  body: string;
+  sourceType: "wordpress" | "crm";
+  remoteId?: number | string;
 };
 ```
 
@@ -72,3 +67,15 @@ The contact and onboarding forms are intentionally disabled. They do not collect
 - `src/services` — external API boundaries
 - `src/styles` — design tokens and responsive site styles
 - `assets` — local fonts, imagery, and video
+## Automated news sync
+
+News articles are fetched from the public Oaksors WordPress REST API by Firebase Functions and cached in Firestore. Hosting proxies the frontend request through `/api/news`; the first request imports the current articles automatically when the collection is empty, and the daily scheduled function keeps it updated.
+
+Deploy from the repository root with:
+
+```bash
+npm run build
+firebase deploy --only functions,hosting
+```
+
+The frontend defaults to `VITE_NEWS_API_URL=/api/news`. To force an immediate refresh after deployment, send `POST` to the deployed `syncWordPressNews` function URL. Future CRM records can use the same normalized article contract with `sourceType: "crm"`.
