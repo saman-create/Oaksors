@@ -29,7 +29,7 @@ export function PreciousMetalsIraPage() {
         image="/assets/images/hero-right.png"
         imageAlt="Gold bars arranged on a dark surface"
       >
-        <ButtonLink href="/contact-us/" size="lg">Talk with a specialist <ArrowIcon /></ButtonLink>
+        <ButtonLink href="/get-started-now/" size="lg">Talk with a specialist <ArrowIcon /></ButtonLink>
         <ButtonLink href="#ira-benefits" variant="ghost" size="lg">Explore the benefits</ButtonLink>
       </PageHero>
 
@@ -72,7 +72,7 @@ export function PreciousMetalsIraPage() {
             <p className="page-eyebrow">A guided rollover</p>
             <h2>Keep the process simple from the first call to your first purchase.</h2>
             <p>Contact Oaksors to learn about a potentially tax- and penalty-free rollover. Eligibility and tax treatment depend on your individual account and circumstances.</p>
-            <ButtonLink href="/contact-us/" size="lg">Start a conversation <ArrowIcon /></ButtonLink>
+            <ButtonLink href="/get-started-now/" size="lg">Start a conversation <ArrowIcon /></ButtonLink>
           </div>
           <div className="fee-panel">
             <p className="fee-panel-kicker">Oaksors account support</p>

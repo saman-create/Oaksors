@@ -44,8 +44,7 @@ export function normalizeWordPressPost(post: WordPressPost): NormalizedNewsArtic
 }
 
 export async function fetchWordPressPosts(fetcher: WordPressFetcher = (url) => fetch(url), page = 1) {
-  const fields = "id,date,slug,link,title,excerpt,content,_embedded";
-  const url = `${WORDPRESS_URL}?page=${page}&per_page=100&_embed=1&_fields=${fields}`;
+  const url = `${WORDPRESS_URL}?page=${page}&per_page=100&_embed=1`;
   const response = await fetcher(url);
   if (!response.ok) throw new Error(`WordPress returned ${response.status}`);
   const posts = await response.json() as WordPressPost[];

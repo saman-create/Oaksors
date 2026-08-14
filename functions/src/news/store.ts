@@ -1,10 +1,11 @@
+import { getApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { NormalizedNewsArticle } from "./types.js";
 
-const collection = () => getFirestore().collection("newsArticles");
+const collection = () => getFirestore(getApp(), "oaksors-crm").collection("newsArticles");
 
 export async function saveNewsArticles(articles: NormalizedNewsArticle[]) {
-  const db = getFirestore();
+  const db = getFirestore(getApp(), "oaksors-crm");
   for (let index = 0; index < articles.length; index += 400) {
     const batch = db.batch();
     articles.slice(index, index + 400).forEach((article) => {

@@ -10,7 +10,7 @@ export function ClosingCtaSection() {
             Ask about our tax-free, penalty-free IRA rollover process
           </p>
           <div style={{display: 'flex', justifyContent: 'center', gap: 16}}>
-            <ButtonLink href="#qualify" size="lg" className="group">
+            <ButtonLink href="/get-started-now/" size="lg" className="group">
               Get Started Now
               <svg width={20} height={20} viewBox="0 0 20 20" fill="none" className="icon-slide">
                 <path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

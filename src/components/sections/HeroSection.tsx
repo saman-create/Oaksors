@@ -134,7 +134,7 @@ export function HeroSection() {
             className="hero-animate hero-animate-delay-3"
             style={{ display: "flex", gap: 16, flexWrap: "wrap" }}
           >
-            <ButtonLink href="#qualify" size="lg" className="group">
+            <ButtonLink href="/get-started-now/" size="lg" className="group">
               Get Started Now
               <svg
                 width={20}

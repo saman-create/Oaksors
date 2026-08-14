@@ -4,13 +4,13 @@ import { Button, ButtonLink } from "./Button";
 describe("ButtonLink", () => {
   it("keeps Oaksors styling while exposing an accessible link contract", () => {
     render(
-      <ButtonLink href="#qualify" size="lg">
+      <ButtonLink href="/get-started-now/" size="lg">
         Get Started Now
       </ButtonLink>,
     );
 
     const link = screen.getByRole("link", { name: "Get Started Now" });
-    expect(link).toHaveAttribute("href", "#qualify");
+    expect(link).toHaveAttribute("href", "/get-started-now/");
     expect(link).toHaveClass("btn", "btn-primary", "btn-lg");
   });
 

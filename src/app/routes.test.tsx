@@ -30,6 +30,13 @@ describe("Oaksors routed pages", () => {
     expect(screen.getByRole("button", { name: /secure submission unavailable/i })).toBeDisabled();
   });
 
+  it("routes every homepage Get Started Now CTA to the onboarding page", () => {
+    renderAt("/");
+
+    expect(screen.getAllByRole("link", { name: /get started now/i })).toHaveLength(3);
+    expect(screen.getAllByRole("link", { name: /get started now/i }).every((link) => link.getAttribute("href") === "/get-started-now/")).toBe(true);
+  });
+
   it("re-registers homepage reveal sections after navigating away and back", async () => {
     const user = userEvent.setup();
     renderAt("/");
