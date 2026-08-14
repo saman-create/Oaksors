@@ -15,7 +15,9 @@ type PageHeroProps = {
 export function PageHero({ eyebrow, title, description, image, imageAlt = "", children, compact = false }: PageHeroProps) {
   return (
     <section className={compact ? "page-hero page-hero--compact" : "page-hero"}>
-      <div className="page-hero-orbit" aria-hidden="true" />
+      <video className="page-hero-background-video" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
+        <source src="/assets/videos/page-hero-background.mp4" type="video/mp4" />
+      </video>
       <div className="container page-hero-grid">
         <div className="page-hero-copy">
           <Link to="/" className="page-breadcrumb">Oaksors <span>/</span> {eyebrow}</Link>
