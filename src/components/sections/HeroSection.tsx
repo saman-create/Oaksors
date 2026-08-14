@@ -1,6 +1,31 @@
 import { ButtonLink } from "@/components/ui/Button";
+import { BrandPromise } from "@/components/common/BrandPromise";
+import Hls from "hls.js";
+import { useEffect, useRef } from "react";
+
+const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
 
 export function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls({ maxBufferLength: 30, maxMaxBufferLength: 60 });
+      hls.loadSource(HERO_VIDEO_URL);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => { void video.play().catch(() => undefined); });
+      return () => hls.destroy();
+    }
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = HERO_VIDEO_URL;
+      video.addEventListener("loadedmetadata", () => { void video.play().catch(() => undefined); }, { once: true });
+    }
+  }, []);
+
   return (
     <section
       id="top"
@@ -13,7 +38,21 @@ export function HeroSection() {
         padding: "0 0 60px",
       }}
     >
-      {/* Hero Image Background */}
+      {/* Hero Image Background — kept for future rollback */}
+      <video
+        id="hero-video"
+        ref={videoRef}
+        className="hero-bg-video hero-bg-animate"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-label="Gold bars and coins"
+        style={{ top: 36, height: "115%", objectPosition: "center top", zIndex: -1 }}
+      >
+      </video>
+      {/* Legacy video configuration kept for reference */}
+      {/*
       <img
         src="/assets/images/hero-gold.png"
         alt="Gold bars and coins"
@@ -28,6 +67,7 @@ export function HeroSection() {
           zIndex: -1,
         }}
       />
+      */}
       {/* Hero Video Background (commented out â€” uncomment to restore video) */}
       {/*
       <video
@@ -51,11 +91,17 @@ export function HeroSection() {
         <source data-src-config="heroVideo" type="video/mp4" />
       </video>
       */}
+      <img
+        src="/assets/images/hero-gold-stack.png"
+        alt="Gold bars and coins"
+        className="hero-gold-stack"
+      />
       <div
-        className="container"
+        className="container hero-content-layer"
         style={{ position: "relative", zIndex: 10, width: "100%" }}
       >
-        <div style={{ maxWidth: 800 }}>
+        <div className="hero-content-copy" style={{ maxWidth: 800 }}>
+          <BrandPromise />
           <h1
             className="hero-animate hero-animate-delay-1"
             style={{

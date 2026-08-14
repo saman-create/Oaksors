@@ -5,6 +5,7 @@ import { NewsCard } from "@/components/common/NewsCard";
 import { fallbackArticles, sampleArticle, type NewsArticle } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getArticle } from "@/services/newsApi";
+import { BrandPromise } from "@/components/common/BrandPromise";
 
 function ArticleContent({ article }: { article: NewsArticle }) {
   return article.body.split(/\n\s*\n/).filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>);
@@ -41,6 +42,7 @@ export function ArticlePage() {
           <div className="container article-hero-inner">
             <Link to="/news/" className="article-back">← Back to news</Link>
             <div className="article-meta"><span>{article.category}</span><time dateTime={article.publishedAt}>{date}</time><span>{article.readTime}</span></div>
+            <BrandPromise />
             <h1>{article.title}</h1>
             <p>{article.excerpt}</p>
           </div>

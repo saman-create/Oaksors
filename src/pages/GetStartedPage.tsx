@@ -49,7 +49,7 @@ export function GetStartedPage() {
 
       <section className="mp-section mp-section--light start-intro">
         <div className="container start-intro-grid">
-          <SectionHeading eyebrow="Simple. Quick. Honest." title="Protect your retirement with a process you can understand." description="A specialist can help identify the right paperwork, coordinate custodian conversations, and explain each stage before anything moves." />
+          <SectionHeading eyebrow="What to expect" title="Protect your retirement with a process you can understand." description="A specialist can help identify the right paperwork, coordinate custodian conversations, and explain each stage before anything moves." />
           <ol className="start-steps">
             <li><span>01</span><div><h3>Review</h3><p>Gather a recent account statement and basic account details.</p></div></li>
             <li><span>02</span><div><h3>Discuss</h3><p>Talk through eligibility, objectives, risks, and available account structures.</p></div></li>

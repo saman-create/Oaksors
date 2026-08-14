@@ -485,6 +485,53 @@ body {
     pointer-events: none;
 }
 
+.hero-gold-stack {
+    position: absolute;
+    right: 3%;
+    bottom: 3%;
+    z-index: 1;
+    width: clamp(360px, 45vw, 700px);
+    max-height: 58vh;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+    filter: drop-shadow(0 18px 28px rgb(0 0 0 / 35%));
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .hero-gold-stack {
+        right: -7%;
+        bottom: 5%;
+        width: 52vw;
+        max-height: 48vh;
+        opacity: .72;
+    }
+
+    .hero-content-copy {
+        max-width: 58vw !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero-content-layer {
+        padding-top: clamp(320px, 42vh, 400px);
+    }
+
+    .hero-content-copy {
+        max-width: 100% !important;
+    }
+
+    .hero-gold-stack {
+        top: clamp(126px, 17vh, 156px);
+        right: 50%;
+        bottom: auto;
+        width: min(92vw, 540px);
+        max-height: 31vh;
+        transform: translateX(50%);
+        opacity: .9;
+    }
+}
+
 .hero-overlay {
     position: absolute;
     inset: 0;

@@ -6,7 +6,11 @@ describe("SocialLinks", () => {
   it("renders every Oaksors social profile as an external link", () => {
     render(<SocialLinks />);
 
-    expect(screen.getAllByRole("link")).toHaveLength(6);
+    expect(screen.getAllByRole("link")).toHaveLength(7);
+    expect(screen.getByRole("link", { name: "TikTok" })).toHaveAttribute(
+      "href",
+      "https://www.tiktok.com/@oaksors?_r=1&_t=ZP-98qW6FHedCg",
+    );
     expect(screen.getByRole("link", { name: "Instagram" })).toHaveAttribute(
       "href",
       "https://www.instagram.com/oaksors/",

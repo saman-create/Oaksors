@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getPublishedPrivacyNotice, type PublishedPrivacyNotice } from "@/services/privacyNotice";
+import { BrandPromise } from "@/components/common/BrandPromise";
 
 export function PrivacyNoticePage() {
   const [notice, setNotice] = useState<{ document: PublishedPrivacyNotice | null; failed: boolean }>({ document: null, failed: false });
@@ -20,6 +21,7 @@ export function PrivacyNoticePage() {
       <header className="privacy-masthead">
         <div className="container privacy-masthead-inner">
           <Link to="/" className="page-breadcrumb">Oaksors <span>/</span> Legal</Link>
+          <BrandPromise />
           <h1>{notice.document?.title ?? "PRIVACY NOTICE"}</h1>
         </div>
       </header>
