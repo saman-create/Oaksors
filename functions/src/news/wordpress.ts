@@ -4,17 +4,23 @@ const WORDPRESS_URL = "https://www.oaksorsllc.com/wp-json/wp/v2/posts";
 
 export type WordPressFetcher = (url: string) => Promise<Response>;
 
+const namedEntities: Record<string, string> = {
+  amp: "&", apos: "'", gt: ">", hellip: "…", ldquo: "“", lpar: "(", lt: "<", mdash: "—", nbsp: " ", ndash: "–", quot: '"', rdquo: "”", rpar: ")",
+};
+
+function decodeHtmlEntities(value: string): string {
+  return value.replace(/&(?:#(\d+)|#x([\da-f]+)|([a-z][\da-z]+));/gi, (match, decimal, hexadecimal, named) => {
+    if (decimal) return String.fromCodePoint(Number(decimal));
+    if (hexadecimal) return String.fromCodePoint(Number.parseInt(hexadecimal, 16));
+    return namedEntities[named.toLowerCase()] ?? match;
+  });
+}
+
 export function stripHtml(value = ""): string {
-  return value
+  return decodeHtmlEntities(value
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#039;|&apos;/gi, "'")
-    .replace(/&#8217;|&#x2019;/gi, "’")
-    .replace(/&#8211;|&#x2013;/gi, "–")
+    .replace(/<[^>]+>/g, " "))
     .replace(/\s+/g, " ")
     .trim();
 }

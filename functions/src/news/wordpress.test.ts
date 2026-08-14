@@ -19,6 +19,12 @@ describe("WordPress news adapter", () => {
     expect(article.body).toBe("Body 1");
   });
 
+  it("decodes numeric and named HTML entities in every text field", () => {
+    const article = normalizeWordPressPost({ ...post(3, "2026-08-04"), title: { rendered: "US S&#038;P500 &#8220;Outlook&#8221;" }, excerpt: { rendered: "Stocks&nbsp;and&#8217; silver" } });
+    expect(article.title).toBe("US S&P500 “Outlook”");
+    expect(article.excerpt).toBe("Stocks and’ silver");
+  });
+
   it("follows all reported API pages", async () => {
     const fetcher = async (url: string) => {
       const page = new URL(url).searchParams.get("page");

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { PageHero } from "@/components/common/PageHero";
 import { NewsCard } from "@/components/common/NewsCard";
-import { fallbackArticles, type NewsArticle } from "@/data/news";
+import { NewsListLoadingState } from "@/components/common/NewsLoadingState";
+import type { NewsArticle } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getArticles } from "@/services/newsApi";
 
 export function NewsPage() {
-  const [articles, setArticles] = useState<NewsArticle[]>(fallbackArticles);
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
   usePageMeta("News & Market Insights | Oaksors", "Read precious-metals and retirement-market perspectives from Oaksors.");
 
   useEffect(() => {
-    void getArticles().then(setArticles);
+    void getArticles().then((nextArticles) => { setArticles(nextArticles); setLoading(false); });
   }, []);
 
   return (
@@ -22,9 +24,7 @@ export function NewsPage() {
             <div><p className="page-eyebrow">Latest analysis</p><h2>From the Oaksors desk</h2></div>
             <p>One flexible article system, ready to connect to your dedicated news API.</p>
           </div>
-          <div className="news-grid">
-            {articles.map((article) => <NewsCard key={article.slug} article={article} />)}
-          </div>
+          {loading ? <NewsListLoadingState /> : articles.length ? <div className="news-grid">{articles.map((article) => <NewsCard key={article.slug} article={article} />)}</div> : <div className="news-empty" role="status">News is temporarily unavailable. Please try again shortly.</div>}
         </div>
       </section>
     </main>

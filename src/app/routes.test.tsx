@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { afterEach, vi } from "vitest";
 import { App } from "./App";
 
 function renderAt(path: string) {
@@ -8,9 +9,21 @@ function renderAt(path: string) {
 }
 
 describe("Oaksors routed pages", () => {
-  afterEach(() => window.history.pushState({}, "", "/"));
+  afterEach(() => { window.history.pushState({}, "", "/"); vi.unstubAllGlobals(); });
 
   it("renders the reusable article template at the API slug route", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ articles: [{
+      slug: "will-gold-prices-hit-all-time-highs-again-in-2026",
+      title: "Will gold prices hit all-time highs again in 2026?",
+      excerpt: "Gold market outlook",
+      publishedAt: "2026-08-06T18:08:03Z",
+      category: "Market outlook",
+      image: "https://images.example.com/gold.jpg",
+      imageAlt: "Gold bars",
+      readTime: "4 min read",
+      body: "Gold market context.",
+      sourceType: "wordpress",
+    }] }))));
     renderAt("/news/will-gold-prices-hit-all-time-highs-again-in-2026/");
     expect(await screen.findByRole("heading", { level: 1, name: /will gold prices hit all-time highs again/i })).toBeInTheDocument();
     expect(screen.queryByText(/key takeaways/i)).not.toBeInTheDocument();

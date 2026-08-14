@@ -78,4 +78,4 @@ npm run build
 firebase deploy --only functions,hosting
 ```
 
-The frontend defaults to `VITE_NEWS_API_URL=/api/news`. To force an immediate refresh after deployment, send `POST` to the deployed `syncWordPressNews` function URL. Future CRM records can use the same normalized article contract with `sourceType: "crm"`.
+The frontend defaults to `https://oaksorsllc.web.app/api/news` so local development also uses real published articles. Set `VITE_NEWS_API_URL` only when pointing to another environment. To force an immediate refresh after deployment, send `POST` to the deployed `syncWordPressNews` function URL. Future CRM records can use the same normalized article contract with `sourceType: "crm"`.

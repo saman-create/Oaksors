@@ -17,7 +17,8 @@ export const getNews = onRequest(async (request, response) => {
     response.set("Access-Control-Allow-Origin", "*");
     let articles = await listNewsArticles();
     const needsImageRefresh = articles.some((article) => article.sourceType === "wordpress" && article.image === "/assets/images/news-gold-bullion.jpg");
-    if (!articles.length || needsImageRefresh) {
+    const needsEntityRefresh = articles.some((article) => article.sourceType === "wordpress" && /&(?:#\d+|#x[\da-f]+|[a-z][\da-z]+);/i.test(`${article.title} ${article.excerpt} ${article.body}`));
+    if (!articles.length || needsImageRefresh || needsEntityRefresh) {
       await sync();
       articles = await listNewsArticles();
     }

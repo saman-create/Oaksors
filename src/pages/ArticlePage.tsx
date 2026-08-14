@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowIcon } from "@/components/common/ArrowIcon";
 import { NewsCard } from "@/components/common/NewsCard";
-import { fallbackArticles, sampleArticle, type NewsArticle } from "@/data/news";
+import { ArticleLoadingState } from "@/components/common/NewsLoadingState";
+import type { NewsArticle } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getArticle, getArticles } from "@/services/newsApi";
 import { BrandPromise } from "@/components/common/BrandPromise";
@@ -12,13 +13,13 @@ function ArticleContent({ article }: { article: NewsArticle }) {
 }
 
 export function ArticlePage() {
-  const { slug = sampleArticle.slug } = useParams();
+  const { slug = "" } = useParams();
   const [result, setResult] = useState<{ slug: string; article: NewsArticle | null; loading: boolean }>({
     slug,
-    article: slug === sampleArticle.slug ? sampleArticle : null,
-    loading: slug !== sampleArticle.slug,
+    article: null,
+    loading: true,
   });
-  const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>(fallbackArticles);
+  const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
   const article = result.slug === slug ? result.article : null;
   const loading = result.slug !== slug || result.loading;
   usePageMeta(article ? `${article.title} | Oaksors` : "Market Insight | Oaksors", article?.excerpt ?? "Read the latest precious-metals market insight from Oaksors.");
@@ -35,7 +36,7 @@ export function ArticlePage() {
     void getArticles().then((articles) => setRelatedArticles(articles.filter((candidate) => candidate.slug !== slug).slice(0, 3)));
   }, [slug]);
 
-  if (loading) return <main className="article-status"><div className="container"><p>Loading article…</p></div></main>;
+  if (loading) return <ArticleLoadingState />;
   if (!article) return <main className="article-status"><div className="container"><p className="page-eyebrow">Article unavailable</p><h1>We couldn't find that story.</h1><Link to="/news/" className="text-link">Return to news <ArrowIcon /></Link></div></main>;
 
   const date = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(article.publishedAt));
