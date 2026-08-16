@@ -21,7 +21,7 @@ export function PreciousMetalsIraPage() {
   usePageMeta("Precious Metals IRA | Oaksors", "Learn how a precious metals IRA can add diversification, tax advantages, and inflation protection to retirement savings.");
 
   return (
-    <main>
+    <main className="precious-metals-ira-page">
       <PageHero
         eyebrow="Precious Metals IRA"
         title={<>A steadier foundation for your <em>retirement.</em></>}
