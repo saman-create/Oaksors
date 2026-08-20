@@ -1,11 +1,15 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandPromise } from "@/components/common/BrandPromise";
+import Scanner from "@/components/effects/Scanner";
 import Hls from "hls.js";
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
+const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
 export function HeroSection() {
+  const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3">("original");
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export function HeroSection() {
       video.src = HERO_VIDEO_URL;
       video.addEventListener("loadedmetadata", () => { void video.play().catch(() => undefined); }, { once: true });
     }
-  }, []);
+  }, [variant]);
 
   return (
     <section
@@ -38,19 +42,86 @@ export function HeroSection() {
         padding: "0 0 60px",
       }}
     >
-      {/* Hero Image Background — kept for future rollback */}
-      <video
-        id="hero-video"
-        ref={videoRef}
-        className="hero-bg-video hero-bg-animate"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-label="Gold bars and coins"
-        style={{ top: 36, height: "115%", objectPosition: "center top", zIndex: -1 }}
-      >
-      </video>
+      {variant === "original" ? (
+        <video
+          id="hero-video"
+          ref={videoRef}
+          data-testid="hero-original-background"
+          className="hero-bg-video hero-bg-animate"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          style={{ top: 36, height: "115%", objectPosition: "center top", zIndex: -1 }}
+        />
+      ) : variant === "v1" ? (
+        <div className="hero-effect-background" data-testid="hero-scanner-background">
+          <Scanner
+            color1="#06B6D4"
+            color2="#10B981"
+            color3="#FFFFFF"
+            speed={1.55}
+            sweepSpeed={0.15}
+            sweepWidth={4}
+            sweepFalloff={6}
+            scale={1.0}
+            frequency={2}
+            ripple={0.15}
+            bandDensity={8.5}
+            lineSharpness={5.5}
+            glow={0.54}
+            scanDirection="diagonal"
+            colorSpread={0.63}
+            brightness={1.5}
+            contrast={1.15}
+            softness={1.4}
+            vignette={0.45}
+            scanline
+            grain
+            grainIntensity={0.05}
+            opacity={1}
+            mouseInteraction
+            mouseRadius={1}
+            mouseStrength={1.5}
+          />
+        </div>
+      ) : variant === "v2" ? (
+        <div className="hero-effect-background hero-effect-background--v2" data-testid="hero-floating-lines-background">
+          <Suspense fallback={null}>
+            <FloatingLines
+              enabledWaves={["bottom", "top", "middle"]}
+              lineCount={[10, 15, 20]}
+              lineDistance={33}
+              bendRadius={10.5}
+              bendStrength={1}
+              interactive
+              parallax
+              linesGradient={["#05666a", "#043022", "#026544"]}
+            />
+          </Suspense>
+        </div>
+      ) : (
+        <div className="hero-effect-background" data-testid="hero-line-waves-background">
+          <Suspense fallback={null}>
+            <LineWaves
+              speed={0.3}
+              innerLineCount={10}
+              outerLineCount={17}
+              warpIntensity={0.7}
+              rotation={-45}
+              edgeFadeWidth={0.15}
+              colorCycleSpeed={1}
+              brightness={0.2}
+              color1="#10B981"
+              color2="#06B6D4"
+              color3="#027b53"
+              enableMouseInteraction
+              mouseInfluence={2}
+            />
+          </Suspense>
+        </div>
+      )}
       {/* Legacy video configuration kept for reference */}
       {/*
       <img
@@ -96,6 +167,36 @@ export function HeroSection() {
         alt="Gold bars and coins"
         className="hero-gold-stack"
       />
+      <div className="hero-version-switcher" role="group" aria-label="Hero version">
+        <button
+          type="button"
+          aria-pressed={variant === "original"}
+          onClick={() => setVariant("original")}
+        >
+          Original
+        </button>
+        <button
+          type="button"
+          aria-pressed={variant === "v1"}
+          onClick={() => setVariant("v1")}
+        >
+          V1
+        </button>
+        <button
+          type="button"
+          aria-pressed={variant === "v2"}
+          onClick={() => setVariant("v2")}
+        >
+          V2
+        </button>
+        <button
+          type="button"
+          aria-pressed={variant === "v3"}
+          onClick={() => setVariant("v3")}
+        >
+          V3
+        </button>
+      </div>
       <div
         className="container hero-content-layer"
         style={{ position: "relative", zIndex: 10, width: "100%" }}

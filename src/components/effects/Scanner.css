@@ -1,0 +1,14 @@
+.scanner-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 35%, rgb(30 186 151 / 28%), transparent 34%),
+    #07110f;
+}
+
+.scanner-container canvas {
+  width: 100%;
+  height: 100%;
+}
