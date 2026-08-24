@@ -5,11 +5,14 @@ import Hls from "hls.js";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+const SHOW_HERO_VERSION_SWITCHER = false;
 const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
 const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
 export function HeroSection() {
   const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3">("original");
+  const heroRef = useRef<HTMLElement>(null);
+  const videoMotionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -30,8 +33,82 @@ export function HeroSection() {
     }
   }, [variant]);
 
+  useEffect(() => {
+    const hero = heroRef.current;
+    const motionLayer = videoMotionRef.current;
+    if (!hero || !motionLayer) return;
+    if (typeof window.matchMedia === "function"
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof window.matchMedia === "function"
+      && !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    let frameId: number | undefined;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    const renderMotion = () => {
+      currentX += (targetX - currentX) * 0.15;
+      currentY += (targetY - currentY) * 0.15;
+
+      const hasSettled = Math.abs(targetX - currentX) <= 0.001
+        && Math.abs(targetY - currentY) <= 0.001;
+      if (hasSettled) {
+        currentX = targetX;
+        currentY = targetY;
+      }
+
+      const shiftX = currentX * 36;
+      const shiftY = currentY * 20;
+      const tiltX = currentY * -2.7;
+      const tiltY = currentX * 3;
+
+      motionLayer.style.transform = `perspective(1200px) translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0) rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg) scale(1.12)`;
+
+      if (!hasSettled) {
+        frameId = requestAnimationFrame(renderMotion);
+      } else {
+        frameId = undefined;
+        motionLayer.style.willChange = "";
+      }
+    };
+
+    const requestMotionFrame = () => {
+      if (frameId !== undefined) return;
+      motionLayer.style.willChange = "transform";
+      frameId = requestAnimationFrame(renderMotion);
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const bounds = hero.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+
+      targetX = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1));
+      targetY = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1));
+      requestMotionFrame();
+    };
+
+    const resetMotion = () => {
+      targetX = 0;
+      targetY = 0;
+      requestMotionFrame();
+    };
+
+    hero.addEventListener("mousemove", handleMouseMove);
+    hero.addEventListener("mouseleave", resetMotion);
+
+    return () => {
+      hero.removeEventListener("mousemove", handleMouseMove);
+      hero.removeEventListener("mouseleave", resetMotion);
+      if (frameId !== undefined) cancelAnimationFrame(frameId);
+      motionLayer.style.willChange = "";
+    };
+  }, [variant]);
+
   return (
     <section
+      ref={heroRef}
       id="top"
       style={{
         position: "relative",
@@ -43,18 +120,24 @@ export function HeroSection() {
       }}
     >
       {variant === "original" ? (
-        <video
-          id="hero-video"
-          ref={videoRef}
-          data-testid="hero-original-background"
-          className="hero-bg-video hero-bg-animate"
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          style={{ top: 36, height: "115%", objectPosition: "center top", zIndex: -1 }}
-        />
+        <div
+          ref={videoMotionRef}
+          className="hero-video-motion-layer"
+          data-testid="hero-video-motion-layer"
+        >
+          <video
+            id="hero-video"
+            ref={videoRef}
+            data-testid="hero-original-background"
+            className="hero-bg-video hero-bg-animate"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+            style={{ top: 36, height: "115%", objectPosition: "center top" }}
+          />
+        </div>
       ) : variant === "v1" ? (
         <div className="hero-effect-background" data-testid="hero-scanner-background">
           <Scanner
@@ -167,36 +250,38 @@ export function HeroSection() {
         alt="Gold bars and coins"
         className="hero-gold-stack"
       />
-      <div className="hero-version-switcher" role="group" aria-label="Hero version">
-        <button
-          type="button"
-          aria-pressed={variant === "original"}
-          onClick={() => setVariant("original")}
-        >
-          Original
-        </button>
-        <button
-          type="button"
-          aria-pressed={variant === "v1"}
-          onClick={() => setVariant("v1")}
-        >
-          V1
-        </button>
-        <button
-          type="button"
-          aria-pressed={variant === "v2"}
-          onClick={() => setVariant("v2")}
-        >
-          V2
-        </button>
-        <button
-          type="button"
-          aria-pressed={variant === "v3"}
-          onClick={() => setVariant("v3")}
-        >
-          V3
-        </button>
-      </div>
+      {SHOW_HERO_VERSION_SWITCHER && (
+        <div className="hero-version-switcher" role="group" aria-label="Hero version">
+          <button
+            type="button"
+            aria-pressed={variant === "original"}
+            onClick={() => setVariant("original")}
+          >
+            Original
+          </button>
+          <button
+            type="button"
+            aria-pressed={variant === "v1"}
+            onClick={() => setVariant("v1")}
+          >
+            V1
+          </button>
+          <button
+            type="button"
+            aria-pressed={variant === "v2"}
+            onClick={() => setVariant("v2")}
+          >
+            V2
+          </button>
+          <button
+            type="button"
+            aria-pressed={variant === "v3"}
+            onClick={() => setVariant("v3")}
+          >
+            V3
+          </button>
+        </div>
+      )}
       <div
         className="container hero-content-layer"
         style={{ position: "relative", zIndex: 10, width: "100%" }}

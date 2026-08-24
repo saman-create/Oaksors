@@ -499,6 +499,15 @@ body {
     pointer-events: none;
 }
 
+.hero-video-motion-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transform: perspective(1200px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1.12);
+    transform-origin: center;
+}
+
 .hero-version-switcher {
     position: absolute;
     top: 116px;

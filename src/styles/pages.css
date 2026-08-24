@@ -13,32 +13,32 @@ em { color: var(--mp-green); font-style: normal; }
 .nav-link.active { opacity: 1; background: rgb(255 255 255 / 10%); }
 .menu-close { display: grid; width: 48px; height: 48px; place-items: center; color: white; border: 0; background: transparent; cursor: pointer; }
 
-.page-hero { position: relative; isolation: isolate; min-height: 710px; overflow: hidden; padding: 190px 0 100px; color: white; background: radial-gradient(circle at 72% 34%, rgb(30 186 151 / 18%), transparent 29%), linear-gradient(135deg, #070b0a 0%, #101917 55%, #07120f 100%); }
+.page-hero { position: relative; isolation: isolate; min-height: 100svh; overflow: hidden; padding: 170px 0 60px; color: white; background: radial-gradient(circle at 72% 34%, rgb(30 186 151 / 18%), transparent 29%), linear-gradient(135deg, #070b0a 0%, #101917 55%, #07120f 100%); }
+.page-hero--landing-composition { display: flex; align-items: flex-end; }
 .page-hero-background-video { position: absolute; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; inset: 0; opacity: 1; filter: none; }
 .brand-promise { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 20px 0 24px; color: white; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
 .brand-promise > span { position: relative; overflow: hidden; padding: 8px 12px 7px; color: rgb(255 255 255 / 92%); border: 1px solid rgb(255 255 255 / 24%); border-radius: 999px; background: linear-gradient(135deg, rgb(255 255 255 / 18%), rgb(30 186 151 / 10%)); box-shadow: inset 0 1px 1px rgb(255 255 255 / 22%), inset 0 -8px 18px rgb(0 0 0 / 12%), 0 8px 20px rgb(0 0 0 / 12%); backdrop-filter: blur(14px) saturate(1.35); -webkit-backdrop-filter: blur(14px) saturate(1.35); }
 .brand-promise > span::before { position: absolute; top: 0; right: 18%; left: 18%; height: 1px; content: ""; background: rgb(255 255 255 / 48%); }
 .brand-promise > span:nth-child(2) { color: var(--mp-green); border-color: rgb(30 186 151 / 52%); background: linear-gradient(135deg, rgb(46 255 208 / 23%), rgb(30 186 151 / 10%)); }
 .page-hero-copy .brand-promise { margin-top: 24px; }
-.page-hero--compact { min-height: 560px; padding-bottom: 90px; }
-.conversion-page .page-hero--compact { min-height: 430px; padding: 170px 0 68px; }
+.page-hero--compact { min-height: 100svh; }
+.conversion-page .page-hero--compact { min-height: 100svh; padding: 170px 0 60px; }
 .conversion-page .page-hero--compact .page-breadcrumb { margin-bottom: 28px; }
-.conversion-page .page-hero--compact h1 { font-size: clamp(44px, 4.7vw, 66px); }
+.conversion-page .page-hero--compact h1 { font-size: clamp(40px, 5.5vw, 72px); }
 .page-hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr); gap: 80px; align-items: center; }
 .page-hero--compact .page-hero-grid { grid-template-columns: minmax(0, 900px); }
 .page-hero-copy { max-width: 800px; }
 .page-breadcrumb { display: inline-flex; gap: 9px; align-items: center; margin-bottom: 56px; color: rgb(255 255 255 / 55%); font-size: 13px; text-decoration: none; }
 .page-breadcrumb span { color: var(--mp-green); }
 .page-eyebrow { margin-bottom: 17px; color: var(--mp-green); font-size: 12px; font-weight: 500; letter-spacing: .17em; text-transform: uppercase; }
-.page-hero h1 { max-width: 900px; color: white; font-family: var(--font-sans); font-size: clamp(48px, 5.6vw, 78px); font-weight: 400; letter-spacing: -.052em; line-height: .98; }
-.page-hero-description { max-width: 660px; margin-top: 28px; color: rgb(255 255 255 / 68%); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; }
+.page-hero h1 { max-width: 900px; color: white; font-family: var(--font-sans); font-size: clamp(40px, 5.5vw, 72px); font-weight: 400; letter-spacing: -.04em; line-height: .97; }
+.page-hero-description { max-width: 520px; margin-top: 20px; color: rgb(255 255 255 / 76%); font-size: clamp(16px, 1.2vw, 18px); line-height: 1.45; }
 .page-hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
-.page-hero-visual { position: relative; height: 430px; }
-.page-hero-visual img { width: 100%; height: 100%; object-fit: contain; opacity: 1; }
+.page-hero-visual { display: flex; position: relative; height: min(54vh, 520px); align-items: flex-end; align-self: end; }
+.page-hero-visual img { width: 100%; height: 100%; object-fit: contain; object-position: right bottom; opacity: 1; }
 .page-hero-seal { position: absolute; right: -26px; bottom: -30px; display: flex; flex-direction: column; width: 126px; height: 126px; align-items: center; justify-content: center; color: #06110e; border-radius: 50%; background: var(--mp-green); font-size: 14px; line-height: 1.25; transform: rotate(-8deg); }
 .precious-metals-ira-page .page-hero-grid { grid-template-columns: minmax(0, 1.04fr) minmax(460px, 1.12fr); }
-.precious-metals-ira-page .page-hero-visual { height: 520px; }
-.precious-metals-ira-page .page-hero-visual { overflow: hidden; }
+.precious-metals-ira-page .page-hero-visual { height: min(54vh, 520px); overflow: visible; }
 .precious-metals-ira-page .page-hero-visual img { width: 100%; max-width: 100%; }
 
 .mp-section { position: relative; padding: 112px 0; }
@@ -69,18 +69,46 @@ em { color: var(--mp-green); font-style: normal; }
 .fee-row span { display: grid; width: 28px; height: 28px; place-items: center; color: #07110f; border-radius: 50%; background: var(--mp-green); font-size: 12px; }
 .fee-disclaimer { margin-top: 20px; color: rgb(255 255 255 / 40%); font-size: 12px; line-height: 1.6; }
 
-.ira-media-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 26px; align-items: end; }
+.ira-media-section { overflow: clip; }
+.ira-media-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(430px, 1.05fr); gap: clamp(42px, 6vw, 88px); align-items: start; }
 .ira-media-grid .mp-section-heading { margin-bottom: 30px; }
+.ira-media-copy { position: sticky; top: 124px; }
 .video-frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #0d1513; }
 .video-frame iframe { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; border: 0; }
 .asset-placeholder { display: flex; position: absolute; inset: 0; flex-direction: column; gap: 8px; align-items: center; justify-content: center; padding: 28px; color: #52605c; background: var(--mp-mist); text-align: center; }
 .asset-placeholder strong { color: var(--mp-ink); font-size: 18px; }
 .asset-placeholder span { font-size: 13px; }
-.trust-partner-card { display: flex; min-height: 440px; flex-direction: column; padding: 30px; color: var(--mp-ink); border: 1px solid var(--mp-line); border-radius: 18px; background: white; text-decoration: none; }
-.trust-partner-card > p { margin-bottom: 22px; color: var(--mp-green-dark); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
-.trust-logo-wrap { position: relative; flex: 1; min-height: 260px; overflow: hidden; border-radius: 12px; background: var(--mp-mist); }
-.trust-logo-wrap img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; background: white; }
-.trust-partner-card > .text-link { margin-top: 24px; }
+.ira-journey { position: relative; overflow: hidden; padding: clamp(28px, 4vw, 44px); color: white; border-radius: 22px; background: #0d1513; box-shadow: 0 28px 64px rgb(15 56 46 / 15%); isolation: isolate; }
+.ira-journey::after { position: absolute; z-index: -1; right: -130px; bottom: -150px; width: 310px; height: 310px; content: ""; border: 1px solid rgb(30 186 151 / 14%); border-radius: 50%; box-shadow: 0 30px 70px rgb(30 186 151 / 8%); }
+.ira-journey-start { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 24px; border-bottom: 1px solid rgb(255 255 255 / 10%); }
+.ira-journey-start span, .ira-journey-finish > div:last-child > span { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; color: #07110f; border-radius: 999px; background: var(--mp-green); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.ira-journey-start p { color: rgb(255 255 255 / 48%); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.ira-journey-track { position: relative; margin-top: 30px; }
+.ira-journey-rail { position: absolute; z-index: 0; top: 20px; bottom: 22px; left: 21px; width: 1px; overflow: hidden; background: rgb(255 255 255 / 14%); }
+.ira-journey-rail i { display: block; width: 100%; height: 100%; background: var(--mp-green); transform: scaleY(0); transform-origin: top; transition: transform 900ms cubic-bezier(.16, 1, .3, 1); }
+.ira-journey-list { position: relative; z-index: 1; list-style: none; }
+.ira-journey-step { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; opacity: 1; transform: none; clip-path: inset(0); transition: opacity 520ms cubic-bezier(.16, 1, .3, 1), transform 620ms cubic-bezier(.16, 1, .3, 1), clip-path 620ms cubic-bezier(.16, 1, .3, 1); }
+.ira-journey:not(.is-visible) .ira-journey-step { opacity: 0; transform: translateY(18px); clip-path: inset(0 0 18%); }
+.ira-journey-step:nth-child(2) { transition-delay: 70ms; }
+.ira-journey-step:nth-child(3) { transition-delay: 140ms; }
+.ira-journey-step:nth-child(4) { transition-delay: 210ms; }
+.ira-journey-step:nth-child(5) { transition-delay: 280ms; }
+.ira-journey-step:nth-child(6) { transition-delay: 350ms; }
+.ira-journey-step > div { padding: 1px 0 27px; border-bottom: 1px solid rgb(255 255 255 / 9%); }
+.ira-journey-step + .ira-journey-step { padding-top: 24px; }
+.ira-journey-node { display: grid; position: relative; z-index: 2; width: 42px; height: 42px; place-items: center; color: rgb(255 255 255 / 70%); border: 1px solid rgb(255 255 255 / 18%); border-radius: 50%; background: var(--mp-night); font-size: 11px; font-weight: 600; transition: color 320ms ease, border-color 320ms ease, background 320ms ease, box-shadow 420ms ease; }
+.ira-journey.is-visible .ira-journey-node { color: #06100d; border-color: rgb(30 186 151 / 70%); background: var(--mp-green); box-shadow: 0 8px 22px rgb(30 186 151 / 24%); }
+.ira-journey.is-visible .ira-journey-rail i { transform: scaleY(1); }
+.ira-journey-label { display: block; margin-bottom: 7px; color: var(--mp-green); font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.ira-journey-step h3 { margin-bottom: 8px; color: white; font-size: clamp(20px, 2vw, 24px); font-weight: 450; letter-spacing: -.025em; line-height: 1.15; }
+.ira-journey-step p { max-width: 46ch; color: rgb(255 255 255 / 58%); font-size: 14px; line-height: 1.58; }
+.ira-journey-finish { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 20px; align-items: center; margin-top: 28px; padding-top: 30px; border-top: 1px solid rgb(255 255 255 / 12%); opacity: 1; transform: none; transition: opacity 520ms 480ms cubic-bezier(.16, 1, .3, 1), transform 620ms 480ms cubic-bezier(.16, 1, .3, 1); }
+.ira-journey:not(.is-visible) .ira-journey-finish { opacity: 0; transform: translateY(16px); }
+.ira-journey-finish-mark { display: grid; width: 66px; height: 66px; place-items: center; border-radius: 50%; background: rgb(30 186 151 / 10%); }
+.ira-journey-finish-mark svg { width: 42px; height: 34px; overflow: visible; fill: none; stroke: var(--mp-green); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ira-journey-finish > div:last-child > span { min-height: 24px; margin-bottom: 11px; padding: 0 9px; font-size: 8px; }
+.ira-journey-finish h3 { margin-bottom: 8px; color: white; font-size: 22px; font-weight: 450; letter-spacing: -.025em; line-height: 1.15; }
+.ira-journey-finish p { max-width: 48ch; color: rgb(255 255 255 / 48%); font-size: 13px; line-height: 1.55; }
 .text-link { display: inline-flex; gap: 9px; align-items: center; color: var(--mp-green-dark); font-weight: 500; text-decoration: none; }
 
 .metal-widget-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
@@ -304,6 +332,14 @@ em { color: var(--mp-green); font-style: normal; }
 .site-footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 27px; color: rgb(255 255 255 / 40%); border-top: 1px solid rgb(255 255 255 / 9%); font-size: 13px; }
 .site-footer-bottom span, .site-footer-bottom a { color: var(--mp-green); text-decoration: none; }
 
+@media (min-width: 1200px) {
+  .precious-metals-ira-page .page-hero-visual {
+    width: clamp(360px, 45vw, 700px);
+    justify-self: end;
+    transform: translate(calc(max(40px, 50vw - 680px) - 3vw), calc(60px - 3svh));
+  }
+}
+
 @media (max-width: 1023px) {
   .page-hero-grid { grid-template-columns: 1fr .75fr; gap: 45px; }
   .precious-metals-ira-page .page-hero-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -319,18 +355,19 @@ em { color: var(--mp-green); font-style: normal; }
   .privacy-layout { grid-template-columns: 220px 1fr; gap: 55px; }
   .article-layout { grid-template-columns: 130px minmax(0, 1fr); gap: 40px; }
   .ira-media-grid { grid-template-columns: 1fr; }
-  .trust-partner-card { min-height: 360px; }
+  .ira-media-copy { position: static; }
+  .ira-journey { width: min(100%, 760px); margin: 0 auto; }
   .news-grid, .news-loading-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 767px) {
-  .page-hero, .page-hero--compact { min-height: auto; padding: 145px 0 70px; }
-  .conversion-page .page-hero--compact { min-height: 370px; padding: 140px 0 58px; }
+  .page-hero, .page-hero--compact { min-height: 100svh; padding: 132px 0 48px; }
+  .conversion-page .page-hero--compact { min-height: 100svh; padding: 132px 0 48px; }
   .page-hero-grid { grid-template-columns: 1fr; gap: 28px; }
   .precious-metals-ira-page .page-hero-visual { min-height: 320px; margin: 0; }
   .precious-metals-ira-page .page-hero-visual img { width: 100%; }
   .page-breadcrumb { margin-bottom: 42px; }
-  .page-hero h1 { font-size: clamp(43px, 13vw, 62px); }
+  .page-hero h1, .conversion-page .page-hero--compact h1 { font-size: 40px; }
   .page-hero-description { font-size: 16px; }
   .page-hero-actions { flex-direction: column; }
   .page-hero-actions .btn { width: 100%; }
@@ -340,6 +377,20 @@ em { color: var(--mp-green); font-style: normal; }
   .mp-section-heading { margin-bottom: 38px; }
   .mp-section-heading h2, .rollover-section h2, .custodian-section h2, .contact-location-grid h2, .start-form-heading h2 { font-size: 37px; }
   .mp-section-heading > p:last-child { font-size: 16px; }
+  .ira-media-grid { gap: 48px; }
+  .ira-journey { padding: 25px 22px 28px; }
+  .ira-journey-start { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .ira-journey-track { margin-top: 26px; }
+  .ira-journey-rail { left: 19px; }
+  .ira-journey-step { grid-template-columns: 40px minmax(0, 1fr); gap: 14px; }
+  .ira-journey-node { width: 38px; height: 38px; }
+  .ira-journey-step + .ira-journey-step { padding-top: 22px; }
+  .ira-journey-step > div { padding-bottom: 23px; }
+  .ira-journey-step h3 { font-size: 20px; }
+  .ira-journey-finish { grid-template-columns: 52px minmax(0, 1fr); gap: 15px; }
+  .ira-journey-finish-mark { width: 52px; height: 52px; }
+  .ira-journey-finish-mark svg { width: 34px; height: 28px; }
+  .ira-journey-finish h3 { font-size: 20px; }
   .fee-panel, .mp-form-card, .mp-form-card--wide { padding: 23px; }
   .start-form-layout { grid-template-columns: 1fr; }
   .start-intro-inline { padding: 0; }
@@ -397,4 +448,5 @@ em { color: var(--mp-green); font-style: normal; }
   .page-hero-background-video { display: none; }
   .news-card-image img, .scroll-reveal { transition: none !important; }
   .news-skeleton-block::after { animation: none; }
+  .ira-journey-step, .ira-journey-finish, .ira-journey-node, .ira-journey-rail i { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; }
 }

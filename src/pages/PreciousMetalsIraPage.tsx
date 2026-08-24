@@ -1,6 +1,7 @@
 import { ArrowIcon } from "@/components/common/ArrowIcon";
 import { PageHero } from "@/components/common/PageHero";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { IraJourney } from "@/components/sections/IraJourney";
 import { ButtonLink } from "@/components/ui/Button";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -26,7 +27,7 @@ export function PreciousMetalsIraPage() {
         eyebrow="Precious Metals IRA"
         title={<>A steadier foundation for your <em>retirement.</em></>}
         description="A precious metals IRA offers investment flexibility, familiar retirement-account tax treatment, and a tangible way to diversify beyond traditional markets."
-        image="/assets/images/hero-right.png"
+        image="/assets/images/hero-right-transparent.png"
         imageAlt="Gold bars arranged on a dark surface"
       >
         <ButtonLink href="/get-started-now/" size="lg">Talk with a specialist <ArrowIcon /></ButtonLink>
@@ -48,21 +49,14 @@ export function PreciousMetalsIraPage() {
 
       <section className="mp-section mp-section--soft ira-media-section">
         <div className="container ira-media-grid">
-          <div>
+          <div className="ira-media-copy">
             <SectionHeading eyebrow="Watch the overview" title="Understand the rollover before you begin." description="A short Oaksors overview of the precious-metals IRA process and the questions to ask before moving an account." />
             <div className="video-frame">
               <div className="asset-placeholder"><strong>Oaksors IRA overview video</strong><span>YouTube video: VkZqUc-j_rI</span></div>
-              <iframe title="Oaksors precious metals IRA overview" src="https://www.youtube.com/embed/VkZqUc-j_rI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
+              <iframe title="Oaksors precious metals IRA overview" src="https://www.youtube.com/embed/VkZqUc-j_rI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" loading="lazy" allowFullScreen />
             </div>
           </div>
-          <a className="trust-partner-card" href="https://www.preferredtrustcompany.com/why-self-directed-ira/" target="_blank" rel="noreferrer">
-            <p>Preferred Trust Company</p>
-            <div className="trust-logo-wrap">
-              <div className="asset-placeholder"><strong>Preferred Trust Company logo</strong><span>Independent self-directed IRA custodian</span></div>
-              <img src="/assets/images/preferred-trust.webp" alt="Preferred Trust Company" onError={(event) => { event.currentTarget.hidden = true; }} />
-            </div>
-            <span className="text-link">Learn about self-directed IRAs <ArrowIcon /></span>
-          </a>
+          <IraJourney />
         </div>
       </section>
 
