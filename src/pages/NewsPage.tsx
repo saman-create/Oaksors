@@ -1,19 +1,29 @@
 import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageHero } from "@/components/common/PageHero";
 import { NewsCard } from "@/components/common/NewsCard";
 import { NewsListLoadingState } from "@/components/common/NewsLoadingState";
-import type { NewsArticle } from "@/data/news";
+import type { NewsListResult } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getArticles } from "@/services/newsApi";
 
 export function NewsPage() {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const page = Math.max(1, Number.parseInt(searchParams.get("page") ?? "1", 10) || 1);
+  const [reload, setReload] = useState(0);
+  const [state, setState] = useState<{ page: number; reload: number; phase: "loading" | "success" | "error"; result?: NewsListResult }>({ page, reload, phase: "loading" });
   usePageMeta("News & Market Insights | Oaksors", "Read precious-metals and retirement-market perspectives from Oaksors.");
 
   useEffect(() => {
-    void getArticles().then((nextArticles) => { setArticles(nextArticles); setLoading(false); });
-  }, []);
+    const controller = new AbortController();
+    void getArticles({ page, limit: 20, signal: controller.signal })
+      .then((result) => setState({ page, reload, phase: "success", result }))
+      .catch((error: unknown) => { if (!(error instanceof DOMException && error.name === "AbortError")) setState({ page, reload, phase: "error" }); });
+    return () => controller.abort();
+  }, [page, reload]);
+
+  const phase = state.page === page && state.reload === reload ? state.phase : "loading";
+  const articles = phase === "success" ? [...(state.result?.articles ?? [])].sort((a, b) => Number(b.featured) - Number(a.featured)) : [];
 
   return (
     <main>
@@ -22,9 +32,17 @@ export function NewsPage() {
         <div className="container">
           <div className="news-index-toolbar">
             <div><p className="page-eyebrow">Latest analysis</p><h2>From the Oaksors desk</h2></div>
-            <p>One flexible article system, ready to connect to your dedicated news API.</p>
+            <p>Live market context and retirement-focused perspectives from the Oaksors team.</p>
           </div>
-          {loading ? <NewsListLoadingState /> : articles.length ? <div className="news-grid">{articles.map((article) => <NewsCard key={article.slug} article={article} />)}</div> : <div className="news-empty" role="status">News is temporarily unavailable. Please try again shortly.</div>}
+          {phase === "loading" && <NewsListLoadingState />}
+          {phase === "error" && <div className="news-empty news-error" role="alert"><p>We couldn't load the latest news.</p><button className="text-link" type="button" onClick={() => setReload((value) => value + 1)}>Try again</button></div>}
+          {phase === "success" && !articles.length && <div className="news-empty" role="status">There are no published articles yet. Please check back soon.</div>}
+          {phase === "success" && articles.length > 0 && <div className="news-grid">{articles.map((article) => <NewsCard key={article.slug} article={article} />)}</div>}
+          {phase === "success" && (state.result?.pagination.totalPages ?? 0) > 1 && <nav className="news-pagination" aria-label="News pagination">
+            {page > 1 && <Link to={`/news?page=${page - 1}`}>Previous</Link>}
+            <span>Page {page} of {state.result?.pagination.totalPages}</span>
+            {page < (state.result?.pagination.totalPages ?? 0) && <Link to={`/news?page=${page + 1}`}>Next</Link>}
+          </nav>}
         </div>
       </section>
     </main>

@@ -1,7 +1,10 @@
+import type { FormEvent } from "react";
 import { PageHero } from "@/components/common/PageHero";
-import { DisabledFormNotice } from "@/components/forms/DisabledFormNotice";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
+import { FormStatus } from "@/components/forms/FormStatus";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useCrmSubmission } from "@/hooks/useCrmSubmission";
+import type { EmailSubmission } from "@/services/crmApi";
 
 const contactCards = [
   { label: "Customer service", value: "(855) 612-5017", href: "tel:8556125017", note: "Monday–Friday, 8am–5pm PST" },
@@ -10,7 +13,16 @@ const contactCards = [
 ];
 
 export function ContactPage() {
-  usePageMeta("Contact Oaksors", "Call, email, or visit Oaksors in Long Beach, California, and preview the retirement qualification inquiry.");
+  const submission = useCrmSubmission("email-submissions");
+  usePageMeta("Contact Oaksors", "Call, email, visit, or send a message to the Oaksors team in Long Beach, California.");
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const phone = String(data.get("phone") ?? "").trim();
+    const payload: EmailSubmission = { firstName: String(data.get("firstName") ?? "").trim(), lastName: String(data.get("lastName") ?? "").trim(), email: String(data.get("email") ?? "").trim(), ...(phone ? { phone } : {}), subject: String(data.get("subject") ?? "").trim(), message: String(data.get("message") ?? "").trim(), sourcePage: "contact", privacyConsent: true };
+    if (await submission.submit(payload)) form.reset();
+  }
   return (
     <main className="conversion-page">
       <PageHero compact eyebrow="Contact us" title={<>Real people. Clear answers. <em>No runaround.</em></>} description="Whether you are comparing options or ready to discuss an existing retirement account, our team is here to help you understand the next step." />
@@ -18,20 +30,19 @@ export function ContactPage() {
       <section className="mp-section mp-section--soft inquiry-section inquiry-section--early">
         <div className="container inquiry-grid">
           <div className="mp-form-card">
-            <DisabledFormNotice />
-            <form aria-label="Disabled account qualification form">
-              <fieldset disabled>
+            <form aria-label="Contact email form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+              <fieldset disabled={submission.isSubmitting}>
                 <div className="mp-form-grid">
-                  <FormField label="First name" name="firstName" autoComplete="given-name" />
-                  <FormField label="Last name" name="lastName" autoComplete="family-name" />
-                  <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" />
-                  <FormField label="Email address" name="email" type="email" autoComplete="email" />
-                  <FormField label="Retirement status" name="retired"><select id="retired" name="retired" defaultValue=""><option value="">Select an option</option><option>Retired</option><option>Not retired</option></select></FormField>
-                  <FormField label="Date of birth" name="dob" type="date" />
-                  <TextAreaField label="Please describe your portfolio: assets, account types, and approximate values." name="portfolio" />
-                  <TextAreaField label="What are your biggest concerns about your portfolio and retirement?" name="concerns" />
+                  <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
+                  <FormField label="Last name" name="lastName" autoComplete="family-name" required error={submission.fieldErrors.lastName} />
+                  <FormField label="Email address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
+                  <FormField label="Cell phone (optional)" name="phone" type="tel" autoComplete="tel" error={submission.fieldErrors.phone} />
+                  <FormField label="Subject" name="subject" full required maxLength={160} error={submission.fieldErrors.subject} />
+                  <TextAreaField label="Message" name="message" required maxLength={4000} error={submission.fieldErrors.message} />
+                  <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
                 </div>
-                <button type="button" className="btn btn-primary btn-lg" disabled>Submission unavailable</button>
+                <FormStatus phase={submission.phase} />
+                <button type="submit" className="btn btn-primary btn-lg">{submission.isSubmitting ? "Sending…" : "Send message"}</button>
               </fieldset>
             </form>
           </div>

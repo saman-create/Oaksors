@@ -1,0 +1,50 @@
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { useCrmSubmission } from "@/hooks/useCrmSubmission";
+
+afterEach(() => vi.unstubAllGlobals());
+
+const payload = { firstName: "Jane", email: "jane@example.com", privacyConsent: true };
+
+describe("useCrmSubmission", () => {
+  it("reuses the key for an unchanged failed retry and changes it for changed data", async () => {
+    const requests: RequestInit[] = [];
+    vi.stubGlobal("fetch", vi.fn(async (_url: string, init: RequestInit) => {
+      requests.push(init);
+      return new Response(JSON.stringify({ error: { code: "server_error", message: "Try again" } }), { status: 500 });
+    }));
+    const { result } = renderHook(() => useCrmSubmission("email-submissions"));
+    await act(() => result.current.submit(payload));
+    await act(() => result.current.submit(payload));
+    await act(() => result.current.submit({ ...payload, firstName: "Janet" }));
+
+    const keys = requests.map((request) => (request.headers as Record<string, string>)["Idempotency-Key"]);
+    expect(keys[0]).toBe(keys[1]);
+    expect(keys[2]).not.toBe(keys[1]);
+  });
+
+  it("maps success, duplicate, and validation responses to useful UI state", async () => {
+    const responses = [
+      new Response(JSON.stringify({ submission: { id: "one", status: "received" } }), { status: 201 }),
+      new Response(JSON.stringify({ error: { code: "duplicate", message: "Already received" } }), { status: 409 }),
+      new Response(JSON.stringify({ error: { code: "validation_error", message: "Check fields", fields: { email: "Enter a valid email." } } }), { status: 422 }),
+    ];
+    vi.stubGlobal("fetch", vi.fn(async () => responses.shift()));
+    const { result } = renderHook(() => useCrmSubmission("email-submissions"));
+
+    await act(() => result.current.submit(payload));
+    expect(result.current.phase).toBe("success");
+    await act(() => result.current.submit({ ...payload, firstName: "Janet" }));
+    expect(result.current.phase).toBe("duplicate");
+    await act(() => result.current.submit({ ...payload, firstName: "June" }));
+    expect(result.current.phase).toBe("error");
+    expect(result.current.fieldErrors).toEqual({ email: "Enter a valid email." });
+  });
+
+  it("distinguishes rate limiting so the UI can ask the visitor to wait", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: { code: "rate_limited", message: "Too many submissions" } }), { status: 429 })));
+    const { result } = renderHook(() => useCrmSubmission("email-submissions"));
+    await act(() => result.current.submit(payload));
+    expect(result.current.phase).toBe("rate-limited");
+  });
+});

@@ -8,6 +8,18 @@ export default defineConfig({
   resolve: {
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
   },
+  server: {
+    proxy: {
+      "/crm-api": {
+        target: "https://oaksorscrm.web.app",
+        changeOrigin: true,
+        headers: {
+          Origin: "https://www.oaksorsllc.com",
+        },
+        rewrite: (path) => path.replace(/^\/crm-api/, ""),
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",

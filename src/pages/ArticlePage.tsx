@@ -3,10 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowIcon } from "@/components/common/ArrowIcon";
 import { NewsCard } from "@/components/common/NewsCard";
 import { ArticleLoadingState } from "@/components/common/NewsLoadingState";
-import type { NewsArticle } from "@/data/news";
+import type { NewsArticle, NewsArticleSummary } from "@/data/news";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { getArticle, getArticles } from "@/services/newsApi";
 import { BrandPromise } from "@/components/common/BrandPromise";
+import { NewsImage } from "@/components/common/NewsImage";
+import { ApiError } from "@/services/newsApi";
 
 function ArticleContent({ article }: { article: NewsArticle }) {
   return article.body.split(/\n\s*\n/).filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>);
@@ -14,30 +16,31 @@ function ArticleContent({ article }: { article: NewsArticle }) {
 
 export function ArticlePage() {
   const { slug = "" } = useParams();
-  const [result, setResult] = useState<{ slug: string; article: NewsArticle | null; loading: boolean }>({
-    slug,
-    article: null,
-    loading: true,
-  });
-  const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
-  const article = result.slug === slug ? result.article : null;
-  const loading = result.slug !== slug || result.loading;
+  const [reload, setReload] = useState(0);
+  const [result, setResult] = useState<{ slug: string; reload: number; phase: "loading" | "success" | "not-found" | "error"; article?: NewsArticle }>({ slug, reload, phase: "loading" });
+  const [relatedArticles, setRelatedArticles] = useState<NewsArticleSummary[]>([]);
+  const currentResult = result.slug === slug && result.reload === reload;
+  const article = currentResult ? result.article : undefined;
+  const loading = !currentResult || result.phase === "loading";
   usePageMeta(article ? `${article.title} | Oaksors` : "Market Insight | Oaksors", article?.excerpt ?? "Read the latest precious-metals market insight from Oaksors.");
 
   useEffect(() => {
-    let active = true;
-    void getArticle(slug).then((nextArticle) => {
-      if (active) setResult({ slug, article: nextArticle, loading: false });
+    const controller = new AbortController();
+    void getArticle(slug, { signal: controller.signal }).then((nextArticle) => setResult({ slug, reload, phase: "success", article: nextArticle })).catch((error: unknown) => {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      setResult({ slug, reload, phase: error instanceof ApiError && error.status === 404 ? "not-found" : "error" });
     });
-    return () => { active = false; };
-  }, [slug]);
+    return () => controller.abort();
+  }, [slug, reload]);
 
   useEffect(() => {
-    void getArticles().then((articles) => setRelatedArticles(articles.filter((candidate) => candidate.slug !== slug).slice(0, 3)));
+    const controller = new AbortController();
+    void getArticles({ page: 1, limit: 4, signal: controller.signal }).then(({ articles }) => setRelatedArticles(articles.filter((candidate) => candidate.slug !== slug).slice(0, 3))).catch(() => setRelatedArticles([]));
+    return () => controller.abort();
   }, [slug]);
 
   if (loading) return <ArticleLoadingState />;
-  if (!article) return <main className="article-status"><div className="container"><p className="page-eyebrow">Article unavailable</p><h1>We couldn't find that story.</h1><Link to="/news/" className="text-link">Return to news <ArrowIcon /></Link></div></main>;
+  if (!article) return <main className="article-status"><div className="container"><h1>{result.phase === "not-found" ? "We couldn't find that story." : "We couldn't load this story."}</h1><p>{result.phase === "not-found" ? "It may have moved or is no longer published." : "Check your connection and try again."}</p>{result.phase === "error" && <button type="button" className="text-link" onClick={() => setReload((value) => value + 1)}>Try again</button>}<Link to="/news/" className="text-link">Return to news <ArrowIcon /></Link></div></main>;
 
   const date = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(article.publishedAt));
 
@@ -53,7 +56,7 @@ export function ArticlePage() {
             <p>{article.excerpt}</p>
           </div>
         </header>
-        <figure className="container article-image-wrap"><img src={article.image} alt={article.imageAlt} /></figure>
+        <figure className="container article-image-wrap"><NewsImage key={article.image} src={article.image} alt={article.imageAlt} title={article.title} /></figure>
         <div className="container article-layout">
           <aside className="article-aside">
             <p>Share this perspective</p>
