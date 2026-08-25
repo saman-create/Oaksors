@@ -269,6 +269,22 @@ em { color: var(--mp-green); font-style: normal; }
 .form-status { margin: 0 0 20px; padding: 15px 17px; color: #164c40; border-radius: 12px; background: #e8f6f2; font-size: 14px; line-height: 1.55; }
 .form-status--duplicate, .form-status--rate-limited { color: #59460d; background: #fbf3d8; }
 .form-status--error { color: #7b2c2c; background: #fbeaea; }
+.mp-form-card .form-submit-button {
+  min-height: 52px;
+  padding-inline: 26px;
+  color: white;
+  background: var(--mp-green-dark);
+  box-shadow: 0 12px 28px rgb(15 97 78 / 20%);
+}
+.mp-form-card .form-submit-button:hover { color: white; background: var(--mp-green); box-shadow: 0 15px 32px rgb(15 97 78 / 26%); transform: translateY(-1px); }
+.mp-form-card .form-submit-button:focus-visible { outline: 3px solid rgb(30 186 151 / 38%); outline-offset: 3px; }
+.mp-form-card .form-submit-button:disabled { color: white; background: var(--mp-green-dark); box-shadow: none; transform: none; }
+.form-success { display: grid; min-height: 430px; align-content: center; justify-items: start; padding: 20px 8px; outline: none; }
+.form-success-icon { display: grid; width: 58px; height: 58px; margin-bottom: 26px; place-items: center; color: white; border-radius: 50%; background: var(--mp-green-dark); box-shadow: 0 12px 30px rgb(15 97 78 / 22%); }
+.form-success-icon svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.form-success .page-eyebrow { margin-bottom: 12px; color: var(--mp-green-dark); }
+.form-success h2 { max-width: 520px; margin-bottom: 15px; color: var(--mp-ink); font-size: clamp(32px, 4vw, 46px); font-weight: 400; letter-spacing: -.04em; line-height: 1.05; }
+.form-success > p:not(.page-eyebrow) { max-width: 560px; margin-bottom: 28px; color: #52605c; font-size: 16px; line-height: 1.65; }
 .mp-form-card fieldset { border: 0; }
 .mp-form-card fieldset:disabled { opacity: .78; }
 .mp-form-card .btn:disabled { cursor: not-allowed; opacity: .58; }
@@ -412,6 +428,7 @@ em { color: var(--mp-green); font-style: normal; }
   .ira-journey-finish-mark svg { width: 34px; height: 28px; }
   .ira-journey-finish h3 { font-size: 20px; }
   .fee-panel, .mp-form-card, .mp-form-card--wide { padding: 23px; }
+  .mp-form-card .form-submit-button { width: 100%; }
   .start-form-layout { grid-template-columns: 1fr; }
   .start-intro-inline { padding: 0; }
   .custodian-image { min-height: 310px; }

@@ -23,5 +23,13 @@ describe("ContactPage", () => {
     await user.click(screen.getByRole("button", { name: /send message/i }));
     expect(fetchMock.mock.calls[0][0]).toBe("https://oaksorscrm.web.app/api/crm/email-submissions");
     expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({ sourcePage: "contact", privacyConsent: true });
+    expect(await screen.findByRole("heading", { name: /your message has been sent/i })).toBeInTheDocument();
+    expect(screen.queryByRole("form", { name: /contact email form/i })).not.toBeInTheDocument();
+  });
+
+  it("uses the shared primary form action styling", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><ContactPage /></MemoryRouter>);
+    expect(screen.getByRole("button", { name: /send message/i })).toHaveClass("form-submit-button");
   });
 });

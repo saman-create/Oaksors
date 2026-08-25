@@ -86,7 +86,9 @@ export function QualificationSection() {
           </div>
         </div>
         <div className="scroll-reveal mp-form-card" style={{transitionDelay: '100ms'}}>
-          <form aria-label="Account qualification form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+          {submission.phase === "success" ? (
+            <FormStatus phase="success" successTitle="Your request has been sent." onReset={submission.clearFeedback} />
+          ) : <form aria-label="Account qualification form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
             <fieldset disabled={submission.isSubmitting}>
               <div className="mp-form-grid">
                 <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
@@ -100,9 +102,9 @@ export function QualificationSection() {
                 <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
               </div>
               <FormStatus phase={submission.phase} />
-              <button type="submit" className="btn btn-primary btn-lg">{submission.isSubmitting ? "SENDING…" : "REQUEST INFORMATION NOW"}</button>
+              <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "SENDING…" : "REQUEST INFORMATION NOW"}</button>
             </fieldset>
-          </form>
+          </form>}
         </div>
       </div>
     </section>

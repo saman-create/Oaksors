@@ -30,7 +30,9 @@ export function GetStartedPage() {
         <div className="container">
           <div className="start-form-layout">
             <div className="mp-form-card">
-              <form aria-label="Retirement account intake form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+              {submission.phase === "success" ? (
+                <FormStatus phase="success" successTitle="Your intake has been sent." onReset={submission.clearFeedback} />
+              ) : <form aria-label="Retirement account intake form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
                 <fieldset disabled={submission.isSubmitting}>
                   <div className="mp-form-grid">
                     <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
@@ -46,9 +48,9 @@ export function GetStartedPage() {
                     <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
                   </div>
                   <FormStatus phase={submission.phase} />
-                  <button type="submit" className="btn btn-primary btn-lg">{submission.isSubmitting ? "Submitting…" : "Submit retirement intake"}</button>
+                  <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "Submitting…" : "Submit retirement intake"}</button>
                 </fieldset>
-              </form>
+              </form>}
             </div>
 
             <div className="start-inline-divider" aria-hidden="true" />

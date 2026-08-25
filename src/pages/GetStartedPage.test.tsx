@@ -28,5 +28,13 @@ describe("GetStartedPage", () => {
     expect(body).toMatchObject({ married: "married", portfolioValue: "250000-500000", accountTypes: ["Traditional IRA"], privacyConsent: true });
     expect(body).not.toHaveProperty("taxId");
     expect(body).not.toHaveProperty("statement");
+    expect(await screen.findByRole("heading", { name: /your intake has been sent/i })).toBeInTheDocument();
+    expect(screen.queryByRole("form", { name: /retirement account intake form/i })).not.toBeInTheDocument();
+  });
+
+  it("uses the shared primary form action styling", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    expect(screen.getByRole("button", { name: /submit retirement intake/i })).toHaveClass("form-submit-button");
   });
 });

@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import { StrictMode } from "react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -41,5 +42,13 @@ describe("NewsPage", () => {
     const image = await screen.findByRole("img", { name: "Gold bars" });
     image.dispatchEvent(new Event("error"));
     expect(await screen.findByRole("img", { name: /image unavailable for the gold outlook/i })).toBeInTheDocument();
+  });
+
+  it("shares the initial request across Strict Mode remounts", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ articles: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<StrictMode><MemoryRouter initialEntries={["/news"]}><Routes><Route path="/news" element={<NewsPage />} /></Routes></MemoryRouter></StrictMode>);
+    expect(await screen.findByText(/no published articles yet/i)).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

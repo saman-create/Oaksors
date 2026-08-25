@@ -46,12 +46,28 @@ async function request(path: string, signal?: AbortSignal): Promise<unknown> {
   try { return await response.json(); } catch { throw new ApiError("News service returned an invalid response.", { status: response.status, code: "invalid_response" }); }
 }
 
-export async function getArticles(options: { page?: number; limit?: number; signal?: AbortSignal } = {}): Promise<NewsListResult> {
-  const page = Math.max(1, options.page ?? 1);
-  const limit = Math.max(1, options.limit ?? 20);
-  const data = await request(`/api/news?page=${page}&limit=${limit}`, options.signal);
+const pendingArticleLists = new Map<string, Promise<NewsListResult>>();
+
+async function loadArticles(page: number, limit: number, signal?: AbortSignal): Promise<NewsListResult> {
+  const data = await request(`/api/news?page=${page}&limit=${limit}`, signal);
   if (!isObject(data) || !Array.isArray(data.articles)) throw new ApiError("News service returned an invalid list.", { code: "invalid_response" });
   return { articles: data.articles.map(parseSummary), pagination: parsePagination(data.pagination) };
+}
+
+export function getArticles(options: { page?: number; limit?: number; signal?: AbortSignal } = {}): Promise<NewsListResult> {
+  const page = Math.max(1, options.page ?? 1);
+  const limit = Math.max(1, options.limit ?? 20);
+  if (options.signal) return loadArticles(page, limit, options.signal);
+
+  const key = `${page}:${limit}`;
+  const pending = pendingArticleLists.get(key);
+  if (pending) return pending;
+
+  const requestPromise = loadArticles(page, limit);
+  pendingArticleLists.set(key, requestPromise);
+  const clearPending = () => { if (pendingArticleLists.get(key) === requestPromise) pendingArticleLists.delete(key); };
+  void requestPromise.then(clearPending, clearPending);
+  return requestPromise;
 }
 
 export async function getArticle(slug: string, options: { signal?: AbortSignal } = {}): Promise<NewsArticle> {

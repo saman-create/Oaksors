@@ -15,11 +15,11 @@ export function NewsPage() {
   usePageMeta("News & Market Insights | Oaksors", "Read precious-metals and retirement-market perspectives from Oaksors.");
 
   useEffect(() => {
-    const controller = new AbortController();
-    void getArticles({ page, limit: 20, signal: controller.signal })
-      .then((result) => setState({ page, reload, phase: "success", result }))
-      .catch((error: unknown) => { if (!(error instanceof DOMException && error.name === "AbortError")) setState({ page, reload, phase: "error" }); });
-    return () => controller.abort();
+    let active = true;
+    void getArticles({ page, limit: 20 })
+      .then((result) => { if (active) setState({ page, reload, phase: "success", result }); })
+      .catch(() => { if (active) setState({ page, reload, phase: "error" }); });
+    return () => { active = false; };
   }, [page, reload]);
 
   const phase = state.page === page && state.reload === reload ? state.phase : "loading";

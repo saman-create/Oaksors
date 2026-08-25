@@ -30,7 +30,9 @@ export function ContactPage() {
       <section className="mp-section mp-section--soft inquiry-section inquiry-section--early">
         <div className="container inquiry-grid">
           <div className="mp-form-card">
-            <form aria-label="Contact email form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+            {submission.phase === "success" ? (
+              <FormStatus phase="success" successTitle="Your message has been sent." onReset={submission.clearFeedback} />
+            ) : <form aria-label="Contact email form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
               <fieldset disabled={submission.isSubmitting}>
                 <div className="mp-form-grid">
                   <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
@@ -42,9 +44,9 @@ export function ContactPage() {
                   <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
                 </div>
                 <FormStatus phase={submission.phase} />
-                <button type="submit" className="btn btn-primary btn-lg">{submission.isSubmitting ? "Sending…" : "Send message"}</button>
+                <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "Sending…" : "Send message"}</button>
               </fieldset>
-            </form>
+            </form>}
           </div>
           <aside className="contact-info-panel">
             <p className="page-eyebrow">Hours of operation</p>
