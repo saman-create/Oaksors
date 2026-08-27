@@ -4,24 +4,27 @@ type FormFieldProps = {
   label: string;
   children?: ReactNode;
   full?: boolean;
+  error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export function FormField({ label, children, full = false, ...inputProps }: FormFieldProps) {
+export function FormField({ label, children, full = false, error, ...inputProps }: FormFieldProps) {
   const id = inputProps.id ?? inputProps.name;
   return (
     <label className={full ? "mp-field mp-field--full" : "mp-field"} htmlFor={id}>
       <span>{label}</span>
-      {children ?? <input id={id} {...inputProps} />}
+      {children ?? <input id={id} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} {...inputProps} />}
+      {error && <small id={`${id}-error`} className="mp-field-error">{error}</small>}
     </label>
   );
 }
 
-export function TextAreaField({ label, full = true, ...props }: { label: string; full?: boolean } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function TextAreaField({ label, full = true, error, ...props }: { label: string; full?: boolean; error?: string } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const id = props.id ?? props.name;
   return (
     <label className={full ? "mp-field mp-field--full" : "mp-field"} htmlFor={id}>
       <span>{label}</span>
-      <textarea id={id} rows={5} {...props} />
+      <textarea id={id} rows={5} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} {...props} />
+      {error && <small id={`${id}-error`} className="mp-field-error">{error}</small>}
     </label>
   );
 }

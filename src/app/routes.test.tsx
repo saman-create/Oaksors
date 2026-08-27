@@ -12,7 +12,7 @@ describe("Oaksors routed pages", () => {
   afterEach(() => { window.history.pushState({}, "", "/"); vi.unstubAllGlobals(); });
 
   it("renders the reusable article template at the API slug route", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ articles: [{
+    const article = {
       slug: "will-gold-prices-hit-all-time-highs-again-in-2026",
       title: "Will gold prices hit all-time highs again in 2026?",
       excerpt: "Gold market outlook",
@@ -22,25 +22,29 @@ describe("Oaksors routed pages", () => {
       imageAlt: "Gold bars",
       readTime: "4 min read",
       body: "Gold market context.",
+      featured: false,
       sourceType: "wordpress",
-    }] }))));
+    };
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ article }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ articles: [], pagination: { page: 1, limit: 4, total: 0, totalPages: 0 } }), { status: 200 })));
     renderAt("/news/will-gold-prices-hit-all-time-highs-again-in-2026/");
     expect(await screen.findByRole("heading", { level: 1, name: /will gold prices hit all-time highs again/i })).toBeInTheDocument();
     expect(screen.queryByText(/key takeaways/i)).not.toBeInTheDocument();
   });
 
-  it("keeps the contact qualification form disabled", () => {
+  it("renders the active contact email form", () => {
     renderAt("/contact-us/");
-    const form = screen.getByRole("form", { name: /disabled account qualification form/i });
-    expect(form.querySelector("fieldset")).toBeDisabled();
-    expect(screen.getByText(/no information entered here is collected/i)).toBeInTheDocument();
+    const form = screen.getByRole("form", { name: /contact email form/i });
+    expect(form.querySelector("fieldset")).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: /send message/i })).toBeEnabled();
   });
 
-  it("keeps the sensitive onboarding form disabled", () => {
+  it("renders the safe retirement intake without sensitive controls", () => {
     renderAt("/get-started-now/");
-    const form = screen.getByRole("form", { name: /disabled retirement account intake form/i });
-    expect(form.querySelector("fieldset")).toBeDisabled();
-    expect(screen.getByRole("button", { name: /secure submission unavailable/i })).toBeDisabled();
+    const form = screen.getByRole("form", { name: /retirement account intake form/i });
+    expect(form.querySelector("fieldset")).not.toBeDisabled();
+    expect(document.querySelector('input[type="password"], input[type="file"]')).toBeNull();
   });
 
   it("routes every homepage Get Started Now CTA to the onboarding page", () => {

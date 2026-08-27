@@ -1,4 +1,4 @@
-export type NewsArticle = {
+export type NewsArticleSummary = {
   slug: string;
   title: string;
   excerpt: string;
@@ -7,8 +7,15 @@ export type NewsArticle = {
   image: string;
   imageAlt: string;
   readTime: string;
-  source?: { label: string; url: string };
-  body: string;
-  sourceType: "wordpress" | "crm";
+  featured: boolean;
+  sourceType?: "wordpress" | "crm";
   remoteId?: number | string;
 };
+
+export type NewsArticle = NewsArticleSummary & {
+  body: string;
+  source?: { label: string; url: string };
+};
+
+export type NewsPagination = { page: number; limit: number; total: number; totalPages: number };
+export type NewsListResult = { articles: NewsArticleSummary[]; pagination: NewsPagination };

@@ -67,15 +67,18 @@ The contact and onboarding forms are intentionally disabled. They do not collect
 - `src/services` — external API boundaries
 - `src/styles` — design tokens and responsive site styles
 - `assets` — local fonts, imagery, and video
-## Automated news sync
+## Public CRM API
 
-News articles are fetched from the public Oaksors WordPress REST API by Firebase Functions and cached in Firestore. Hosting proxies the frontend request through `/api/news`; the first request imports the current articles automatically when the collection is empty, and the daily scheduled function keeps it updated.
+The public website reads published news and submits its three visitor forms through the existing public CRM API at `https://oaksorscrm.web.app`. No Firebase Admin SDK, Firestore access, or authentication token is used by the frontend.
 
-Deploy from the repository root with:
+The default API base can be changed for another public environment with `VITE_PUBLIC_API_BASE_URL`. The frontend consumes:
 
-```bash
-npm run build
-firebase deploy --only functions,hosting
-```
+- `GET /api/news?page=1&limit=20`
+- `GET /api/news/:slug`
+- `POST /api/crm/qualification-submissions`
+- `POST /api/crm/email-submissions`
+- `POST /api/crm/retirement-intake-submissions`
 
-The frontend defaults to `https://oaksorsllc.web.app/api/news` so local development also uses real published articles. Set `VITE_NEWS_API_URL` only when pointing to another environment. To force an immediate refresh after deployment, send `POST` to the deployed `syncWordPressNews` function URL. Future CRM records can use the same normalized article contract with `sourceType: "crm"`.
+Every form request sends JSON and a per-submission `Idempotency-Key`. Retirement intake intentionally excludes SSNs, Tax IDs, passwords, and document uploads.
+
+During `npm run dev`, Vite proxies `/crm-api` to the same public API so local browser testing works with the API's production-only CORS policy. Production builds call `https://oaksorscrm.web.app` directly.
