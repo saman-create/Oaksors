@@ -5,7 +5,7 @@ import Hls from "hls.js";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
-const SHOW_HERO_VERSION_SWITCHER = false;
+const SHOW_HERO_VERSION_SWITCHER = true;
 const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
 const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
@@ -59,10 +59,10 @@ export function HeroSection() {
         currentY = targetY;
       }
 
-      const shiftX = currentX * 36;
-      const shiftY = currentY * 20;
-      const tiltX = currentY * -2.7;
-      const tiltY = currentX * 3;
+      const shiftX = currentX * 25.2;
+      const shiftY = currentY * 14;
+      const tiltX = currentY * -1.89;
+      const tiltY = currentX * 2.1;
 
       motionLayer.style.transform = `perspective(1200px) translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0) rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg) scale(1.12)`;
 
@@ -192,7 +192,7 @@ export function HeroSection() {
               innerLineCount={10}
               outerLineCount={17}
               warpIntensity={0.7}
-              rotation={-45}
+              rotation={45}
               edgeFadeWidth={0.15}
               colorCycleSpeed={1}
               brightness={0.2}
@@ -245,11 +245,13 @@ export function HeroSection() {
         <source data-src-config="heroVideo" type="video/mp4" />
       </video>
       */}
-      <img
-        src="/assets/images/hero-gold-stack.png"
-        alt="Gold bars and coins"
-        className="hero-gold-stack"
-      />
+      {variant === "original" && (
+        <img
+          src="/assets/images/hero-gold-stack.png"
+          alt="Gold bars and coins"
+          className="hero-gold-stack"
+        />
+      )}
       {SHOW_HERO_VERSION_SWITCHER && (
         <div className="hero-version-switcher" role="group" aria-label="Hero version">
           <button
