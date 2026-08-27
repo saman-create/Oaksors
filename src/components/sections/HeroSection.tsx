@@ -10,7 +10,7 @@ const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
 const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
 export function HeroSection() {
-  const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3">("original");
+  const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3" | "v4">("original");
   const heroRef = useRef<HTMLElement>(null);
   const videoMotionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -119,7 +119,7 @@ export function HeroSection() {
         padding: "0 0 60px",
       }}
     >
-      {variant === "original" ? (
+      {variant === "original" || variant === "v1" ? (
         <div
           ref={videoMotionRef}
           className="hero-video-motion-layer"
@@ -138,7 +138,7 @@ export function HeroSection() {
             style={{ top: 36, height: "115%", objectPosition: "center top" }}
           />
         </div>
-      ) : variant === "v1" ? (
+      ) : variant === "v2" ? (
         <div className="hero-effect-background" data-testid="hero-scanner-background">
           <Scanner
             color1="#06B6D4"
@@ -169,7 +169,7 @@ export function HeroSection() {
             mouseStrength={1.5}
           />
         </div>
-      ) : variant === "v2" ? (
+      ) : variant === "v3" ? (
         <div className="hero-effect-background hero-effect-background--v2" data-testid="hero-floating-lines-background">
           <Suspense fallback={null}>
             <FloatingLines
@@ -281,6 +281,13 @@ export function HeroSection() {
             onClick={() => setVariant("v3")}
           >
             V3
+          </button>
+          <button
+            type="button"
+            aria-pressed={variant === "v4"}
+            onClick={() => setVariant("v4")}
+          >
+            V4
           </button>
         </div>
       )}
