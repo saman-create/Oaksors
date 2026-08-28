@@ -5,12 +5,12 @@ import Hls from "hls.js";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
-const SHOW_HERO_VERSION_SWITCHER = false;
+const SHOW_HERO_VERSION_SWITCHER = true;
 const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
 const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
 export function HeroSection() {
-  const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3">("original");
+  const [variant, setVariant] = useState<"original" | "v1" | "v2" | "v3" | "v4">("original");
   const heroRef = useRef<HTMLElement>(null);
   const videoMotionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,10 +59,10 @@ export function HeroSection() {
         currentY = targetY;
       }
 
-      const shiftX = currentX * 36;
-      const shiftY = currentY * 20;
-      const tiltX = currentY * -2.7;
-      const tiltY = currentX * 3;
+      const shiftX = currentX * 25.2;
+      const shiftY = currentY * 14;
+      const tiltX = currentY * -1.89;
+      const tiltY = currentX * 2.1;
 
       motionLayer.style.transform = `perspective(1200px) translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0) rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg) scale(1.12)`;
 
@@ -119,7 +119,7 @@ export function HeroSection() {
         padding: "0 0 60px",
       }}
     >
-      {variant === "original" ? (
+      {variant === "original" || variant === "v1" ? (
         <div
           ref={videoMotionRef}
           className="hero-video-motion-layer"
@@ -138,7 +138,7 @@ export function HeroSection() {
             style={{ top: 36, height: "115%", objectPosition: "center top" }}
           />
         </div>
-      ) : variant === "v1" ? (
+      ) : variant === "v2" ? (
         <div className="hero-effect-background" data-testid="hero-scanner-background">
           <Scanner
             color1="#06B6D4"
@@ -169,7 +169,7 @@ export function HeroSection() {
             mouseStrength={1.5}
           />
         </div>
-      ) : variant === "v2" ? (
+      ) : variant === "v3" ? (
         <div className="hero-effect-background hero-effect-background--v2" data-testid="hero-floating-lines-background">
           <Suspense fallback={null}>
             <FloatingLines
@@ -192,7 +192,7 @@ export function HeroSection() {
               innerLineCount={10}
               outerLineCount={17}
               warpIntensity={0.7}
-              rotation={-45}
+              rotation={45}
               edgeFadeWidth={0.15}
               colorCycleSpeed={1}
               brightness={0.2}
@@ -245,11 +245,13 @@ export function HeroSection() {
         <source data-src-config="heroVideo" type="video/mp4" />
       </video>
       */}
-      <img
-        src="/assets/images/hero-gold-stack.png"
-        alt="Gold bars and coins"
-        className="hero-gold-stack"
-      />
+      {variant === "original" && (
+        <img
+          src="/assets/images/hero-gold-stack.png"
+          alt="Gold bars and coins"
+          className="hero-gold-stack"
+        />
+      )}
       {SHOW_HERO_VERSION_SWITCHER && (
         <div className="hero-version-switcher" role="group" aria-label="Hero version">
           <button
@@ -279,6 +281,13 @@ export function HeroSection() {
             onClick={() => setVariant("v3")}
           >
             V3
+          </button>
+          <button
+            type="button"
+            aria-pressed={variant === "v4"}
+            onClick={() => setVariant("v4")}
+          >
+            V4
           </button>
         </div>
       )}
