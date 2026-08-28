@@ -23,7 +23,7 @@ describe("Oaksors routed pages", () => {
       readTime: "4 min read",
       body: "Gold market context.",
       featured: false,
-      sourceType: "wordpress",
+      sourceType: "crm",
     };
     vi.stubGlobal("fetch", vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ article }), { status: 200 }))
@@ -40,11 +40,13 @@ describe("Oaksors routed pages", () => {
     expect(screen.getByRole("button", { name: /send message/i })).toBeEnabled();
   });
 
-  it("renders the safe retirement intake without sensitive controls", () => {
+  it("renders the active retirement intake with the required SSN control", () => {
     renderAt("/get-started-now/");
     const form = screen.getByRole("form", { name: /retirement account intake form/i });
     expect(form.querySelector("fieldset")).not.toBeDisabled();
-    expect(document.querySelector('input[type="password"], input[type="file"]')).toBeNull();
+    expect(screen.getByLabelText("Social Security number")).toHaveAttribute("type", "text");
+    expect(screen.getByLabelText("Social Security number")).toBeRequired();
+    expect(document.querySelector('input[type="file"]')).toBeNull();
   });
 
   it("routes every homepage Get Started Now CTA to the onboarding page", () => {

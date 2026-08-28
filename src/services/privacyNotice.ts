@@ -1,6 +1,4 @@
-const PRIVACY_ENDPOINT = "https://www.oaksorsllc.com/wp-json/wp/v2/pages?slug=privacy-notice&_fields=content";
-
-type PrivacyPageResponse = Array<{ content?: { rendered?: string } }>;
+import privacyNoticeSnapshot from "@/data/privacyNoticeSnapshot.html?raw";
 
 export type PublishedPrivacyNotice = {
   title: string;
@@ -8,15 +6,8 @@ export type PublishedPrivacyNotice = {
   navigation: Array<{ id: string; label: string }>;
 };
 
-export async function getPublishedPrivacyNotice(): Promise<PublishedPrivacyNotice> {
-  const response = await fetch(PRIVACY_ENDPOINT, { headers: { Accept: "application/json" } });
-  if (!response.ok) throw new Error(`Privacy source returned ${response.status}`);
-
-  const pages = await response.json() as PrivacyPageResponse;
-  const rendered = pages[0]?.content?.rendered;
-  if (!rendered) throw new Error("Published privacy notice is empty");
-
-  const document = new DOMParser().parseFromString(rendered, "text/html");
+export function getPublishedPrivacyNotice(): PublishedPrivacyNotice {
+  const document = new DOMParser().parseFromString(privacyNoticeSnapshot, "text/html");
   const heading = [...document.querySelectorAll("h1")].find((element) => element.textContent?.trim().toUpperCase() === "PRIVACY NOTICE");
   const legalContent = heading?.parentElement?.parentElement;
   if (!legalContent) throw new Error("Published privacy notice content was not found");

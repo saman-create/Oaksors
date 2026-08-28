@@ -87,7 +87,7 @@ describe("HeroSection", () => {
     expect(screen.queryByRole("group", { name: "Hero version" })).not.toBeInTheDocument();
   });
 
-  it("strongly pans the original video background toward the mouse", () => {
+  it("pans the original video background toward the mouse", () => {
     const animationFrames = installAnimationFrameQueue();
     const hero = renderHero();
 
@@ -96,14 +96,14 @@ describe("HeroSection", () => {
     animationFrames.shift()?.(0);
 
     const motionLayer = screen.getByTestId("hero-video-motion-layer");
-    expect(motionLayer.style.transform).toContain("translate3d(5.40px, -3.00px, 0)");
+    expect(motionLayer.style.transform).toContain("translate3d(3.78px, -2.10px, 0)");
 
     for (let frame = 1; frame <= 200 && animationFrames.length > 0; frame += 1) {
       animationFrames.shift()?.(frame * 16);
     }
 
     expect(motionLayer.style.transform).toBe(
-      "perspective(1200px) translate3d(36.00px, -20.00px, 0) rotateX(2.700deg) rotateY(3.000deg) scale(1.12)",
+      "perspective(1200px) translate3d(25.20px, -14.00px, 0) rotateX(1.890deg) rotateY(2.100deg) scale(1.12)",
     );
   });
 

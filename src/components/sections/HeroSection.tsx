@@ -5,7 +5,7 @@ import Hls from "hls.js";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const HERO_VIDEO_URL = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
-const SHOW_HERO_VERSION_SWITCHER = true;
+const SHOW_HERO_VERSION_SWITCHER = import.meta.env.VITE_SHOW_HERO_VERSION_SWITCHER === "true" || __VERCEL_DEPLOYMENT__;
 const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
 const LineWaves = lazy(() => import("@/components/effects/LineWaves"));
 
