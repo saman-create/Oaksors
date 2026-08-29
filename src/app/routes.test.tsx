@@ -44,8 +44,8 @@ describe("Oaksors routed pages", () => {
     renderAt("/get-started-now/");
     const form = screen.getByRole("form", { name: /retirement account intake form/i });
     expect(form.querySelector("fieldset")).not.toBeDisabled();
-    expect(screen.getByLabelText("Social Security number")).toHaveAttribute("type", "text");
-    expect(screen.getByLabelText("Social Security number")).toBeRequired();
+    expect(screen.getByLabelText("SSN / Tax ID")).toHaveAttribute("type", "text");
+    expect(screen.getByLabelText("SSN / Tax ID")).toBeRequired();
     expect(document.querySelector('input[type="file"]')).toBeNull();
   });
 

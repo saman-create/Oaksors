@@ -14,7 +14,9 @@ describe("QualificationSection", () => {
     fireEvent.change(screen.getByLabelText("Cell phone"), { target: { value: "+15551234567" } });
     fireEvent.change(screen.getByLabelText("Email Address"), { target: { value: "jane@example.com" } });
     fireEvent.change(screen.getByLabelText("Retirement status"), { target: { value: "retired" } });
-    fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "1970-01-01" } });
+    fireEvent.change(screen.getByLabelText("Birth month"), { target: { value: "01" } });
+    fireEvent.change(screen.getByLabelText("Birth day"), { target: { value: "01" } });
+    fireEvent.change(screen.getByLabelText("Birth year"), { target: { value: "1970" } });
     fireEvent.change(screen.getByLabelText(/describe your portfolio/i), { target: { value: "Traditional IRA worth approximately $250,000." } });
     fireEvent.change(screen.getByLabelText(/biggest concerns/i), { target: { value: "Inflation and long-term diversification." } });
     fireEvent.click(screen.getByLabelText(/agree to the privacy notice/i));

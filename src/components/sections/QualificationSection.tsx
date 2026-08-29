@@ -1,8 +1,10 @@
 import type { FormEvent } from "react";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
+import { DateOfBirthField } from "@/components/forms/DateOfBirthField";
 import { FormStatus } from "@/components/forms/FormStatus";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
 import type { QualificationSubmission } from "@/services/crmApi";
+import { toIsoDob } from "@/utils/dateOfBirth";
 
 export function QualificationSection() {
   const submission = useCrmSubmission("qualification-submissions");
@@ -10,10 +12,12 @@ export function QualificationSection() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
+    const dob = toIsoDob(String(data.get("dob") ?? ""));
+    if (!dob) { submission.setClientErrors({ dob: "Enter a valid past date of birth." }); return; }
     const payload: QualificationSubmission = {
       firstName: String(data.get("firstName") ?? "").trim(), lastName: String(data.get("lastName") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(), email: String(data.get("email") ?? "").trim(),
-      retired: data.get("retired") === "retired" ? "retired" : "not_retired", dob: String(data.get("dob") ?? ""),
+      retired: data.get("retired") === "retired" ? "retired" : "not_retired", dob,
       portfolio: String(data.get("portfolio") ?? "").trim(), concerns: String(data.get("concerns") ?? "").trim(),
       sourcePage: "home", privacyConsent: true,
     };
@@ -96,7 +100,7 @@ export function QualificationSection() {
                 <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" required error={submission.fieldErrors.phone} />
                 <FormField label="Email Address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
                 <FormField label="Retirement status" name="retired" error={submission.fieldErrors.retired}><select id="retired" name="retired" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.retired)} aria-describedby={submission.fieldErrors.retired ? "retired-error" : undefined}><option value="">Select an option</option><option value="retired">Retired</option><option value="not_retired">Not retired</option></select></FormField>
-                <FormField label="Date of birth" name="dob" type="date" required error={submission.fieldErrors.dob} />
+                <DateOfBirthField error={submission.fieldErrors.dob} />
                 <TextAreaField label="Please describe your portfolio: assets, account types, and approximate values." name="portfolio" required maxLength={2000} error={submission.fieldErrors.portfolio} />
                 <TextAreaField label="What are your biggest concerns about your portfolio and retirement?" name="concerns" required maxLength={2000} error={submission.fieldErrors.concerns} />
                 <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>

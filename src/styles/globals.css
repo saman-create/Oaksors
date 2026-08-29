@@ -1058,20 +1058,15 @@ body {
     height: 88px;
     max-width: 25%;
     object-fit: contain;
-    opacity: 0.5;
-    filter: grayscale(100%);
-    transition: opacity 0.3s ease, filter 0.3s ease;
+    opacity: 1;
+    filter: none;
+    transition: transform 0.25s ease, filter 0.25s ease;
     padding: 10px 32px;
-    border-right: 1px solid rgba(0, 0, 0, 0.18);
-}
-
-.partner-logo:last-child {
-    border-right: none;
 }
 
 .partner-logo:hover {
-    opacity: 1;
-    filter: grayscale(0%);
+    transform: translateY(-3px) scale(1.025);
+    filter: drop-shadow(0 8px 12px rgb(16 55 45 / 16%));
 }
 
 .landing-live-metal-grid { display: flex; gap: 16px; overflow-x: auto; margin-left: calc((100vw - 100%) / -2); margin-right: calc((100vw - 100%) / -2); padding-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
