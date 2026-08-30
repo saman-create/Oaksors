@@ -21,14 +21,14 @@ describe("news API", () => {
     expect(fetchMock).toHaveBeenCalledWith("https://oaksorscrm.web.app/api/news?page=2&limit=20", expect.objectContaining({ headers: { Accept: "application/json" } }));
   });
 
-  it("hides WordPress articles from public news lists", async () => {
+  it("returns published articles regardless of their import source", async () => {
     const crmArticle = { ...summary, sourceType: "crm" };
     const wordpressArticle = { ...summary, slug: "legacy-wordpress-story", sourceType: "wordpress" };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({
       articles: [wordpressArticle, crmArticle], pagination: { page: 1, limit: 20, total: 2, totalPages: 1 },
     }), { status: 200 })));
 
-    await expect(getArticles()).resolves.toMatchObject({ articles: [crmArticle] });
+    await expect(getArticles()).resolves.toMatchObject({ articles: [wordpressArticle, crmArticle] });
   });
 
   it("requests an encoded slug and accepts wrapped or direct detail", async () => {
@@ -42,11 +42,11 @@ describe("news API", () => {
     await expect(getArticle(summary.slug)).resolves.toEqual(article);
   });
 
-  it("treats direct WordPress article URLs as not found", async () => {
+  it("returns a published WordPress-imported article by slug", async () => {
     const wordpressArticle = { ...summary, body: "Legacy article body", sourceType: "wordpress" };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ article: wordpressArticle }), { status: 200 })));
 
-    await expect(getArticle(wordpressArticle.slug)).rejects.toMatchObject({ status: 404, code: "not_found" });
+    await expect(getArticle(wordpressArticle.slug)).resolves.toEqual(wordpressArticle);
   });
 
   it("throws an ApiError for HTTP and malformed-response failures", async () => {

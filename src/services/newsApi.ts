@@ -4,12 +4,7 @@ import { PUBLIC_API_BASE } from "@/services/publicApiBase";
 
 export { ApiError } from "@/services/apiError";
 
-// Keep the imported WordPress archive available in the API, but hidden from the public site for now.
-const SHOW_WORDPRESS_ARTICLES = false;
-
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
-
-const isPublicArticle = (article: NewsArticleSummary): boolean => SHOW_WORDPRESS_ARTICLES || article.sourceType !== "wordpress";
 
 function requiredString(value: unknown, field: string): string {
   if (typeof value !== "string") throw new ApiError(`News response is missing ${field}.`, { code: "invalid_response" });
@@ -56,7 +51,7 @@ const pendingArticleLists = new Map<string, Promise<NewsListResult>>();
 async function loadArticles(page: number, limit: number, signal?: AbortSignal): Promise<NewsListResult> {
   const data = await request(`/api/news?page=${page}&limit=${limit}`, signal);
   if (!isObject(data) || !Array.isArray(data.articles)) throw new ApiError("News service returned an invalid list.", { code: "invalid_response" });
-  return { articles: data.articles.map(parseSummary).filter(isPublicArticle), pagination: parsePagination(data.pagination) };
+  return { articles: data.articles.map(parseSummary), pagination: parsePagination(data.pagination) };
 }
 
 export function getArticles(options: { page?: number; limit?: number; signal?: AbortSignal } = {}): Promise<NewsListResult> {
@@ -77,7 +72,5 @@ export function getArticles(options: { page?: number; limit?: number; signal?: A
 
 export async function getArticle(slug: string, options: { signal?: AbortSignal } = {}): Promise<NewsArticle> {
   const data = await request(`/api/news/${encodeURIComponent(slug)}`, options.signal);
-  const article = parseArticle(isObject(data) && "article" in data ? data.article : data);
-  if (!isPublicArticle(article)) throw new ApiError("The requested news could not be loaded.", { status: 404, code: "not_found" });
-  return article;
+  return parseArticle(isObject(data) && "article" in data ? data.article : data);
 }
