@@ -11,6 +11,7 @@ import { toIsoDob } from "@/utils/dateOfBirth";
 
 const accountTypes = ["Traditional IRA", "Roth IRA", "401(k)", "403(b)", "TSP", "SEP IRA", "Annuity", "Other"];
 const maritalStatuses = ["married", "not_married", "divorced", "widowed"] as const;
+const SSN_ERROR = "Enter a valid Social Security number. SSN / Tax ID must contain exactly 9 digits.";
 type MaritalStatus = (typeof maritalStatuses)[number];
 
 function isMaritalStatus(value: string): value is MaritalStatus {
@@ -23,6 +24,18 @@ function formatSsn(value: string) {
   return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
 }
 
+function formatSsnEntry(value: string) {
+  const digits = value.replace(/\D/g, "");
+  const capped = digits.slice(0, 9);
+  const formatted = capped.length <= 3
+    ? capped
+    : capped.length <= 5
+      ? `${capped.slice(0, 3)}-${capped.slice(3)}`
+      : `${capped.slice(0, 3)}-${capped.slice(3, 5)}-${capped.slice(5)}`;
+
+  return { formatted, overflow: digits.length > 9 };
+}
+
 export function GetStartedPage() {
   const submission = useCrmSubmission("retirement-intake-submissions");
   usePageMeta("Get Started | Oaksors", "Review the information needed to begin a precious-metals IRA conversation with Oaksors.");
@@ -33,7 +46,7 @@ export function GetStartedPage() {
     const dob = toIsoDob(String(data.get("dob") ?? "").trim());
     if (!dob) { submission.setClientErrors({ dob: "Enter a valid past date in MM/DD/YYYY format." }); return; }
     const ssn = formatSsn(String(data.get("ssn") ?? "").trim());
-    if (!ssn) { submission.setClientErrors({ ssn: "Enter a valid Social Security number using 9 digits." }); return; }
+    if (!ssn) { submission.setClientErrors({ ssn: SSN_ERROR }); return; }
     const maritalStatus = String(data.get("married") ?? "");
     if (!isMaritalStatus(maritalStatus)) { submission.setClientErrors({ married: "Select a marital status." }); return; }
     const accountTypes = data.getAll("accountTypes").map(String);
@@ -59,7 +72,31 @@ export function GetStartedPage() {
                     <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
                     <FormField label="Last name" name="lastName" autoComplete="family-name" required error={submission.fieldErrors.lastName} />
                     <DateOfBirthField error={submission.fieldErrors.dob} />
-                    <FormField label="SSN / Tax ID" name="ssn" type="text" inputMode="numeric" autoComplete="off" placeholder="123-45-6789" minLength={9} maxLength={11} pattern="[0-9]{3}-?[0-9]{2}-?[0-9]{4}" title="Enter 9 digits, with or without dashes." required error={submission.fieldErrors.ssn} />
+                    <FormField
+                      label="SSN / Tax ID"
+                      name="ssn"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      placeholder="123-45-6789"
+                      minLength={9}
+                      maxLength={12}
+                      pattern="[0-9]{3}-?[0-9]{2}-?[0-9]{4}"
+                      title="Enter exactly 9 digits."
+                      required
+                      error={submission.fieldErrors.ssn}
+                      onInvalid={(event) => {
+                        event.preventDefault();
+                        submission.setClientErrors({ ssn: SSN_ERROR });
+                      }}
+                      onInput={(event) => {
+                        event.stopPropagation();
+                        const result = formatSsnEntry(event.currentTarget.value);
+                        event.currentTarget.value = result.formatted;
+                        if (result.overflow) submission.setClientErrors({ ssn: SSN_ERROR });
+                        else submission.clearFeedback();
+                      }}
+                    />
                     <FormField label="Email address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
                     <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" required error={submission.fieldErrors.phone} />
                     <FormField label="Full address" name="address" autoComplete="street-address" full required error={submission.fieldErrors.address} />

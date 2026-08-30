@@ -130,4 +130,28 @@ describe("GetStartedPage", () => {
     expect(month).toHaveProperty("selectionStart", 0);
     expect(month).toHaveProperty("selectionEnd", 2);
   });
+
+  it("shows an inline validation message when the browser rejects a short SSN", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+
+    const ssn = screen.getByLabelText("SSN / Tax ID");
+    fireEvent.input(ssn, { target: { value: "123" } });
+    fireEvent.invalid(ssn);
+
+    expect(screen.getByText(/must contain exactly 9 digits/i)).toBeInTheDocument();
+    expect(ssn).toHaveAttribute("aria-invalid", "true");
+    expect(ssn).toHaveAccessibleDescription(/must contain exactly 9 digits/i);
+  });
+
+  it("formats SSN input and reports an attempted tenth digit", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+
+    const ssn = screen.getByLabelText("SSN / Tax ID");
+    fireEvent.input(ssn, { target: { value: "1234567890" } });
+
+    expect(ssn).toHaveValue("123-45-6789");
+    expect(screen.getByText(/must contain exactly 9 digits/i)).toBeInTheDocument();
+  });
 });
