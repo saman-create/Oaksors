@@ -144,7 +144,7 @@ describe("GetStartedPage", () => {
     expect(ssn).toHaveAccessibleDescription(/must contain exactly 9 digits/i);
   });
 
-  it("formats SSN input and reports an attempted tenth digit", () => {
+  it("formats SSN input and silently ignores an attempted tenth digit", () => {
     vi.stubGlobal("fetch", vi.fn());
     render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
 
@@ -152,6 +152,16 @@ describe("GetStartedPage", () => {
     fireEvent.input(ssn, { target: { value: "1234567890" } });
 
     expect(ssn).toHaveValue("123-45-6789");
-    expect(screen.getByText(/must contain exactly 9 digits/i)).toBeInTheDocument();
+    expect(screen.queryByText(/must contain exactly 9 digits/i)).not.toBeInTheDocument();
+  });
+
+  it("shows consent validation beside the field without a submission failure warning", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+
+    fireEvent.invalid(screen.getByLabelText(/agree to the privacy notice/i));
+
+    expect(screen.getByText(/confirm that you agree to the privacy notice/i)).toBeInTheDocument();
+    expect(screen.queryByText(/we couldn't submit the form/i)).not.toBeInTheDocument();
   });
 });

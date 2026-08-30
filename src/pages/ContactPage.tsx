@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { PageHero } from "@/components/common/PageHero";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
+import { ConsentField } from "@/components/forms/ConsentField";
 import { FormStatus } from "@/components/forms/FormStatus";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
@@ -32,7 +33,7 @@ export function ContactPage() {
           <div className="mp-form-card">
             {submission.phase === "success" ? (
               <FormStatus phase="success" successTitle="Your message has been sent." onReset={submission.clearFeedback} />
-            ) : <form aria-label="Contact email form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+            ) : <form aria-label="Contact email form" onSubmit={handleSubmit} onInvalid={submission.handleInvalid} onInput={submission.handleInput}>
               <fieldset disabled={submission.isSubmitting}>
                 <div className="mp-form-grid">
                   <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
@@ -41,7 +42,7 @@ export function ContactPage() {
                   <FormField label="Cell phone (optional)" name="phone" type="tel" autoComplete="tel" error={submission.fieldErrors.phone} />
                   <FormField label="Subject" name="subject" full required maxLength={160} error={submission.fieldErrors.subject} />
                   <TextAreaField label="Message" name="message" required maxLength={4000} error={submission.fieldErrors.message} />
-                  <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
+                  <ConsentField error={submission.fieldErrors.privacyConsent} />
                 </div>
                 <FormStatus phase={submission.phase} />
                 <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "Sending…" : "Send message"}</button>

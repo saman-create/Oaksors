@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -31,5 +31,15 @@ describe("ContactPage", () => {
     vi.stubGlobal("fetch", vi.fn());
     render(<MemoryRouter><ContactPage /></MemoryRouter>);
     expect(screen.getByRole("button", { name: /send message/i })).toHaveClass("form-submit-button");
+  });
+
+  it("shows native validation beside the incorrect field without an API warning", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><ContactPage /></MemoryRouter>);
+
+    fireEvent.invalid(screen.getByLabelText("First name"));
+
+    expect(screen.getByText("First name is required.")).toBeInTheDocument();
+    expect(screen.queryByText(/we couldn't submit the form/i)).not.toBeInTheDocument();
   });
 });

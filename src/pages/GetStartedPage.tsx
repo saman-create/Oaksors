@@ -3,6 +3,7 @@ import { PageHero } from "@/components/common/PageHero";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
 import { DateOfBirthField } from "@/components/forms/DateOfBirthField";
+import { ConsentField } from "@/components/forms/ConsentField";
 import { FormStatus } from "@/components/forms/FormStatus";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
@@ -33,7 +34,7 @@ function formatSsnEntry(value: string) {
       ? `${capped.slice(0, 3)}-${capped.slice(3)}`
       : `${capped.slice(0, 3)}-${capped.slice(3, 5)}-${capped.slice(5)}`;
 
-  return { formatted, overflow: digits.length > 9 };
+  return formatted;
 }
 
 export function GetStartedPage() {
@@ -65,7 +66,7 @@ export function GetStartedPage() {
             <div className="mp-form-card">
               {submission.phase === "success" ? (
                 <FormStatus phase="success" successTitle="Your intake has been sent." onReset={submission.clearFeedback} />
-              ) : <form aria-label="Retirement account intake form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+              ) : <form aria-label="Retirement account intake form" onSubmit={handleSubmit} onInvalid={submission.handleInvalid} onInput={submission.handleInput}>
                 <fieldset disabled={submission.isSubmitting}>
                   <p className="mp-required-hint"><span className="mp-required-mark" aria-hidden="true">*</span> Required fields</p>
                   <div className="mp-form-grid">
@@ -80,21 +81,16 @@ export function GetStartedPage() {
                       autoComplete="off"
                       placeholder="123-45-6789"
                       minLength={9}
-                      maxLength={12}
+                      maxLength={11}
                       pattern="[0-9]{3}-?[0-9]{2}-?[0-9]{4}"
                       title="Enter exactly 9 digits."
                       required
                       error={submission.fieldErrors.ssn}
-                      onInvalid={(event) => {
-                        event.preventDefault();
-                        submission.setClientErrors({ ssn: SSN_ERROR });
-                      }}
+                      data-validation-message={SSN_ERROR}
                       onInput={(event) => {
                         event.stopPropagation();
-                        const result = formatSsnEntry(event.currentTarget.value);
-                        event.currentTarget.value = result.formatted;
-                        if (result.overflow) submission.setClientErrors({ ssn: SSN_ERROR });
-                        else submission.clearFeedback();
+                        event.currentTarget.value = formatSsnEntry(event.currentTarget.value);
+                        submission.clearFieldError("ssn");
                       }}
                     />
                     <FormField label="Email address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
@@ -104,7 +100,7 @@ export function GetStartedPage() {
                     <FormField label="Approximate portfolio value" name="portfolioValue" required error={submission.fieldErrors.portfolioValue}><select id="portfolioValue" name="portfolioValue" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.portfolioValue)} aria-describedby={submission.fieldErrors.portfolioValue ? "portfolioValue-error" : undefined}><option value="">Select a range</option><option value="under-100000">Under $100,000</option><option value="100000-250000">$100,000–$250,000</option><option value="250000-500000">$250,000–$500,000</option><option value="500000-1000000">$500,000–$1,000,000</option><option value="1000000-plus">$1,000,000+</option></select></FormField>
                     <fieldset className="mp-check-group mp-field--full" aria-required="true" aria-describedby={submission.fieldErrors.accountTypes ? "accountTypes-error" : undefined}><legend>Please select all account types that apply<span className="mp-required-mark" aria-hidden="true" /></legend><div>{accountTypes.map((type) => <label key={type}><input type="checkbox" name="accountTypes" value={type} /> {type}</label>)}</div>{submission.fieldErrors.accountTypes && <small id="accountTypes-error" className="mp-field-error">{submission.fieldErrors.accountTypes}</small>}</fieldset>
                     <TextAreaField label="Any other information you would like to provide (optional)" name="notes" maxLength={2000} error={submission.fieldErrors.notes} />
-                    <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.<span className="mp-required-mark" aria-hidden="true" /></span></label>
+                    <ConsentField error={submission.fieldErrors.privacyConsent} />
                   </div>
                   <FormStatus phase={submission.phase} />
                   <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "Submitting…" : "Submit"}</button>

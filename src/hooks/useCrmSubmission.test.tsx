@@ -37,7 +37,7 @@ describe("useCrmSubmission", () => {
     await act(() => result.current.submit({ ...payload, firstName: "Janet" }));
     expect(result.current.phase).toBe("duplicate");
     await act(() => result.current.submit({ ...payload, firstName: "June" }));
-    expect(result.current.phase).toBe("error");
+    expect(result.current.phase).toBe("idle");
     expect(result.current.fieldErrors).toEqual({ email: "Enter a valid email." });
   });
 
@@ -46,5 +46,15 @@ describe("useCrmSubmission", () => {
     const { result } = renderHook(() => useCrmSubmission("email-submissions"));
     await act(() => result.current.submit(payload));
     expect(result.current.phase).toBe("rate-limited");
+  });
+
+  it("keeps client validation inline instead of reporting a submission failure", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { result } = renderHook(() => useCrmSubmission("email-submissions"));
+
+    act(() => result.current.setClientErrors({ firstName: "First name is required." }));
+
+    expect(result.current.phase).toBe("idle");
+    expect(result.current.fieldErrors).toEqual({ firstName: "First name is required." });
   });
 });

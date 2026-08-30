@@ -31,15 +31,20 @@ export function DateOfBirthField({ error, required = true }: DateOfBirthFieldPro
   }
 
   const errorId = `${id}-error`;
+  const validationProps = {
+    "data-validation-field": "dob",
+    "data-validation-label": "Date of birth",
+    "data-validation-message": "Enter a valid date of birth in MM/DD/YYYY format.",
+  };
   return (
     <fieldset className="mp-field mp-dob-field" aria-required={required ? "true" : undefined} aria-describedby={error ? errorId : undefined}>
       <legend>Date of birth{required && <span className="mp-required-mark" aria-hidden="true" />}</legend>
       <div className="mp-dob-control" aria-invalid={Boolean(error)}>
-        <input ref={monthRef} type="text" inputMode="numeric" autoComplete="bday-month" aria-label="Birth month" placeholder="MM" value={month} maxLength={2} pattern="0[1-9]|1[0-2]" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 2, setMonth, dayRef.current)} />
+        <input {...validationProps} ref={monthRef} type="text" inputMode="numeric" autoComplete="bday-month" aria-label="Birth month" placeholder="MM" value={month} maxLength={2} pattern="0[1-9]|1[0-2]" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 2, setMonth, dayRef.current)} />
         <span aria-hidden="true">/</span>
-        <input ref={dayRef} type="text" inputMode="numeric" autoComplete="bday-day" aria-label="Birth day" placeholder="DD" value={day} maxLength={2} pattern="0[1-9]|[12][0-9]|3[01]" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 2, setDay, yearRef.current)} onKeyDown={(event) => returnToPrevious(event, monthRef.current)} />
+        <input {...validationProps} ref={dayRef} type="text" inputMode="numeric" autoComplete="bday-day" aria-label="Birth day" placeholder="DD" value={day} maxLength={2} pattern="0[1-9]|[12][0-9]|3[01]" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 2, setDay, yearRef.current)} onKeyDown={(event) => returnToPrevious(event, monthRef.current)} />
         <span aria-hidden="true">/</span>
-        <input ref={yearRef} type="text" inputMode="numeric" autoComplete="bday-year" aria-label="Birth year" placeholder="YYYY" value={year} maxLength={4} pattern="(19|20)[0-9]{2}" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 4, setYear)} onKeyDown={(event) => returnToPrevious(event, dayRef.current)} />
+        <input {...validationProps} ref={yearRef} type="text" inputMode="numeric" autoComplete="bday-year" aria-label="Birth year" placeholder="YYYY" value={year} maxLength={4} pattern="(19|20)[0-9]{2}" required={required} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} onChange={(event) => updatePart(event, 4, setYear)} onKeyDown={(event) => returnToPrevious(event, dayRef.current)} />
       </div>
       <input type="hidden" name="dob" value={`${month}/${day}/${year}`} />
       {error && <small id={errorId} className="mp-field-error">{error}</small>}

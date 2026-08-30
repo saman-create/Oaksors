@@ -292,6 +292,8 @@ em { color: var(--mp-green); font-style: normal; }
 .form-consent { display: flex; gap: 11px; align-items: flex-start; color: #52605c; font-size: 13px; line-height: 1.55; }
 .form-consent input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--mp-green-dark); }
 .form-consent a { color: var(--mp-green-dark); }
+.form-consent-field { display: grid; gap: 6px; }
+.form-consent-field .mp-field-error { margin-left: 28px; }
 .form-status { margin: 0 0 20px; padding: 15px 17px; color: #164c40; border-radius: 12px; background: #e8f6f2; font-size: 14px; line-height: 1.55; }
 .form-status--duplicate, .form-status--rate-limited { color: #59460d; background: #fbf3d8; }
 .form-status--error { color: #7b2c2c; background: #fbeaea; }

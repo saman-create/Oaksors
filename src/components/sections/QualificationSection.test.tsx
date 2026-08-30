@@ -33,4 +33,14 @@ describe("QualificationSection", () => {
     render(<QualificationSection />);
     expect(screen.getByRole("button", { name: /request information now/i })).toHaveClass("form-submit-button");
   });
+
+  it("shows select validation beside the incorrect field without an API warning", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<QualificationSection />);
+
+    fireEvent.invalid(screen.getByLabelText("Retirement status"));
+
+    expect(screen.getByText("Retirement status is required.")).toBeInTheDocument();
+    expect(screen.queryByText(/we couldn't submit the form/i)).not.toBeInTheDocument();
+  });
 });

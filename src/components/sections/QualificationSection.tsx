@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
 import { DateOfBirthField } from "@/components/forms/DateOfBirthField";
+import { ConsentField } from "@/components/forms/ConsentField";
 import { FormStatus } from "@/components/forms/FormStatus";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
 import type { QualificationSubmission } from "@/services/crmApi";
@@ -92,18 +93,18 @@ export function QualificationSection() {
         <div className="scroll-reveal mp-form-card" style={{transitionDelay: '100ms'}}>
           {submission.phase === "success" ? (
             <FormStatus phase="success" successTitle="Your request has been sent." onReset={submission.clearFeedback} />
-          ) : <form aria-label="Account qualification form" onSubmit={handleSubmit} onInput={submission.clearFeedback}>
+          ) : <form aria-label="Account qualification form" onSubmit={handleSubmit} onInvalid={submission.handleInvalid} onInput={submission.handleInput}>
             <fieldset disabled={submission.isSubmitting}>
               <div className="mp-form-grid">
                 <FormField label="First name" name="firstName" autoComplete="given-name" required error={submission.fieldErrors.firstName} />
                 <FormField label="Last name" name="lastName" autoComplete="family-name" required error={submission.fieldErrors.lastName} />
                 <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" required error={submission.fieldErrors.phone} />
                 <FormField label="Email Address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
-                <FormField label="Retirement status" name="retired" error={submission.fieldErrors.retired}><select id="retired" name="retired" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.retired)} aria-describedby={submission.fieldErrors.retired ? "retired-error" : undefined}><option value="">Select an option</option><option value="retired">Retired</option><option value="not_retired">Not retired</option></select></FormField>
+                <FormField label="Retirement status" name="retired" required error={submission.fieldErrors.retired}><select id="retired" name="retired" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.retired)} aria-describedby={submission.fieldErrors.retired ? "retired-error" : undefined}><option value="">Select an option</option><option value="retired">Retired</option><option value="not_retired">Not retired</option></select></FormField>
                 <DateOfBirthField error={submission.fieldErrors.dob} />
                 <TextAreaField label="Please describe your portfolio: assets, account types, and approximate values." name="portfolio" required maxLength={2000} error={submission.fieldErrors.portfolio} />
                 <TextAreaField label="What are your biggest concerns about your portfolio and retirement?" name="concerns" required maxLength={2000} error={submission.fieldErrors.concerns} />
-                <label className="form-consent mp-field--full"><input type="checkbox" name="privacyConsent" required /> <span>I agree to the <a href="/privacy-notice/">privacy notice</a> and consent to being contacted about this request.</span></label>
+                <ConsentField error={submission.fieldErrors.privacyConsent} />
               </div>
               <FormStatus phase={submission.phase} />
               <button type="submit" className="btn btn-primary btn-lg form-submit-button">{submission.isSubmitting ? "SENDING…" : "REQUEST INFORMATION NOW"}</button>
