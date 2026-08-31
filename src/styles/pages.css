@@ -196,6 +196,8 @@ em { color: var(--mp-green); font-style: normal; }
 .article-body > h2 { margin: 34px 0 0; font-size: 34px; font-weight: 500; letter-spacing: -.035em; line-height: 1.25; }
 .article-body > h2:first-child { margin-top: 0; }
 .article-body > p, .article-body > ul { margin: 0; color: #485753; font-family: var(--font-serif); font-size: 19px; line-height: 1.85; }
+.article-body a { color: var(--mp-green-dark); text-decoration: underline; text-decoration-thickness: .08em; text-underline-offset: .16em; }
+.article-body a:hover { color: var(--mp-ink); }
 .article-body > ul { padding-left: 24px; }
 .article-body blockquote { margin: 12px 0; padding: 30px 34px; color: #16352d; border-top: 1px solid var(--mp-green); background: var(--mp-mist); font-family: var(--font-serif); font-size: 23px; line-height: 1.55; }
 .article-source { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding: 24px 0; border-top: 1px solid var(--mp-line); border-bottom: 1px solid var(--mp-line); }

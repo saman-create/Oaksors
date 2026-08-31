@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowIcon } from "@/components/common/ArrowIcon";
 import { NewsCard } from "@/components/common/NewsCard";
@@ -10,8 +10,30 @@ import { BrandPromise } from "@/components/common/BrandPromise";
 import { NewsImage } from "@/components/common/NewsImage";
 import { ApiError } from "@/services/newsApi";
 
+const urlPattern = /https?:\/\/[^\s<>"']+/gi;
+const trailingUrlPunctuation = /[.,!?;:)\]}]+$/;
+
+function linkifyText(text: string): ReactNode[] {
+  const content: ReactNode[] = [];
+  let cursor = 0;
+
+  for (const match of text.matchAll(urlPattern)) {
+    const matchedUrl = match[0];
+    const start = match.index ?? cursor;
+    const url = matchedUrl.replace(trailingUrlPunctuation, "");
+
+    content.push(text.slice(cursor, start));
+    content.push(<a key={`${start}-${url}`} href={url} target="_blank" rel="noreferrer">{url}</a>);
+    content.push(matchedUrl.slice(url.length));
+    cursor = start + matchedUrl.length;
+  }
+
+  content.push(text.slice(cursor));
+  return content;
+}
+
 function ArticleContent({ article }: { article: NewsArticle }) {
-  return article.body.split(/\n\s*\n/).filter(Boolean).map((paragraph) => <p key={paragraph}>{paragraph}</p>);
+  return article.body.split(/\n\s*\n/).filter(Boolean).map((paragraph) => <p key={paragraph}>{linkifyText(paragraph)}</p>);
 }
 
 export function ArticlePage() {
