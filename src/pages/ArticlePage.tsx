@@ -13,6 +13,17 @@ import { ApiError } from "@/services/newsApi";
 const urlPattern = /https?:\/\/[^\s<>"']+/gi;
 const trailingUrlPunctuation = /[.,!?;:)\]}]+$/;
 
+function formatUrlLabel(url: string) {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace(/^www\./, "");
+    const pathname = decodeURI(parsed.pathname).replace(/\/$/, "");
+    return `${hostname}${pathname}`;
+  } catch {
+    return url;
+  }
+}
+
 function linkifyText(text: string): ReactNode[] {
   const content: ReactNode[] = [];
   let cursor = 0;
@@ -23,7 +34,7 @@ function linkifyText(text: string): ReactNode[] {
     const url = matchedUrl.replace(trailingUrlPunctuation, "");
 
     content.push(text.slice(cursor, start));
-    content.push(<a key={`${start}-${url}`} href={url} target="_blank" rel="noreferrer">{url}</a>);
+    content.push(<a key={`${start}-${url}`} href={url} target="_blank" rel="noreferrer" title={url}>{formatUrlLabel(url)}</a>);
     content.push(matchedUrl.slice(url.length));
     cursor = start + matchedUrl.length;
   }

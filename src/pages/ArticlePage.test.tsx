@@ -23,19 +23,21 @@ describe("ArticlePage", () => {
     await waitFor(() => expect(document.title).toBe("The gold outlook | Oaksors"));
   });
 
-  it("turns embedded HTTP URLs into links that open in a new tab", async () => {
+  it("turns embedded HTTP URLs into compact links without exposing tracking parameters", async () => {
+    const trackedUrl = "https://www.example.com/research?utm_source=newsletter&utm_campaign=retirement";
     const fetchMock = vi.fn()
-      .mockResolvedValueOnce(new Response(JSON.stringify({ article: { ...article, body: "Read https://example.com/research and http://example.org/updates." } }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ article: { ...article, body: `Read ${trackedUrl} and http://example.org/updates.` } }), { status: 200 }))
       .mockRejectedValueOnce(new TypeError("related unavailable"));
     vi.stubGlobal("fetch", fetchMock);
     renderArticle();
 
-    const httpsLink = await screen.findByRole("link", { name: "https://example.com/research" });
-    const httpLink = screen.getByRole("link", { name: "http://example.org/updates" });
-    expect(httpsLink).toHaveAttribute("href", "https://example.com/research");
+    const httpsLink = await screen.findByRole("link", { name: "example.com/research" });
+    const httpLink = screen.getByRole("link", { name: "example.org/updates" });
+    expect(httpsLink).toHaveAttribute("href", trackedUrl);
     expect(httpsLink).toHaveAttribute("target", "_blank");
     expect(httpsLink).toHaveAttribute("rel", "noreferrer");
     expect(httpLink).toHaveAttribute("href", "http://example.org/updates");
+    expect(httpsLink).not.toHaveTextContent("utm_source");
   });
 
   it("shows a not-found state for a 404 detail response", async () => {
