@@ -13,7 +13,12 @@ describe("GetStartedPage", () => {
     const ssn = screen.getByLabelText("SSN / Tax ID");
     expect(ssn).toHaveAttribute("type", "text");
     expect(ssn).toHaveAttribute("autocomplete", "off");
-    expect(document.querySelector('input[type="file"]')).toBeNull();
+    const attachment = screen.getByLabelText("Supporting documents (optional)");
+    expect(attachment).toHaveAttribute("type", "file");
+    expect(attachment).toHaveAttribute("multiple");
+    expect(attachment).not.toHaveAttribute("accept");
+    const supportingFile = new File(["statement contents"], "account-statement.pdf", { type: "application/pdf" });
+    fireEvent.change(attachment, { target: { files: [supportingFile] } });
     fireEvent.change(screen.getByLabelText("First name"), { target: { value: "Jane" } });
     fireEvent.change(screen.getByLabelText("Last name"), { target: { value: "Doe" } });
     fireEvent.change(screen.getByLabelText("Birth month"), { target: { value: "01" } });
@@ -29,9 +34,12 @@ describe("GetStartedPage", () => {
     fireEvent.click(screen.getByLabelText(/agree to the privacy notice/i));
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-    const body = JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body));
-    expect(body).toMatchObject({ dob: "1970-01-01", ssn: "123-45-6789", married: "divorced", portfolioValue: "250000-500000", accountTypes: ["Traditional IRA"], privacyConsent: true });
-    expect(body).not.toHaveProperty("statement");
+    const body = (fetchMock.mock.calls[0][1] as RequestInit).body as FormData;
+    const submittedPayload = JSON.parse(String(body.get("payload")));
+    expect(submittedPayload).toMatchObject({ dob: "1970-01-01", ssn: "123-45-6789", married: "divorced", portfolioValue: "250000-500000", accountTypes: ["Traditional IRA"], privacyConsent: true });
+    expect(submittedPayload).not.toHaveProperty("attachments");
+    expect(body.getAll("attachments")).toEqual([supportingFile]);
+    expect((fetchMock.mock.calls[0][1] as RequestInit).headers).not.toHaveProperty("Content-Type");
     expect(await screen.findByRole("heading", { name: /your intake has been sent/i })).toBeInTheDocument();
     expect(screen.queryByRole("form", { name: /retirement account intake form/i })).not.toBeInTheDocument();
   });
@@ -40,6 +48,91 @@ describe("GetStartedPage", () => {
     vi.stubGlobal("fetch", vi.fn());
     render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
     expect(screen.getByRole("button", { name: "Submit" })).toHaveClass("form-submit-button");
+  });
+
+  it("shows selected attachments and lets the visitor remove one", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    const input = screen.getByLabelText("Supporting documents (optional)");
+    fireEvent.change(input, { target: { files: [
+      new File(["one"], "statement.pdf", { type: "application/pdf" }),
+      new File(["two"], "photo.jpg", { type: "image/jpeg" }),
+    ] } });
+
+    expect(screen.getByText("statement.pdf")).toBeInTheDocument();
+    expect(screen.getByText("photo.jpg")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Remove statement.pdf" }));
+    expect(screen.queryByText("statement.pdf")).not.toBeInTheDocument();
+    expect(screen.getByText("photo.jpg")).toBeInTheDocument();
+  });
+
+  it("appends files selected in separate picker sessions", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    const input = screen.getByLabelText("Supporting documents (optional)");
+
+    fireEvent.change(input, { target: { files: [new File(["one"], "statement.pdf", { type: "application/pdf" })] } });
+    fireEvent.change(input, { target: { files: [new File(["two"], "photo.jpg", { type: "image/jpeg" })] } });
+
+    expect(screen.getByText("statement.pdf")).toBeInTheDocument();
+    expect(screen.getByText("photo.jpg")).toBeInTheDocument();
+    expect(screen.getByText("2 of 3 files selected")).toBeInTheDocument();
+  });
+
+  it("keeps existing files when an additional selection exceeds the limit", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    const input = screen.getByLabelText("Supporting documents (optional)");
+
+    fireEvent.change(input, { target: { files: [
+      new File(["1"], "one.txt"),
+      new File(["2"], "two.txt"),
+    ] } });
+    fireEvent.change(input, { target: { files: [
+      new File(["3"], "three.txt"),
+      new File(["4"], "four.txt"),
+    ] } });
+
+    expect(screen.getByText(/attach no more than 3 files/i)).toBeInTheDocument();
+    expect(screen.getByText("one.txt")).toBeInTheDocument();
+    expect(screen.getByText("two.txt")).toBeInTheDocument();
+    expect(screen.queryByText("three.txt")).not.toBeInTheDocument();
+  });
+
+  it("rejects more than three attachments inline", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    fireEvent.change(screen.getByLabelText("Supporting documents (optional)"), { target: { files: [
+      new File(["1"], "one.txt"),
+      new File(["2"], "two.txt"),
+      new File(["3"], "three.txt"),
+      new File(["4"], "four.txt"),
+    ] } });
+
+    expect(screen.getByText(/attach no more than 3 files/i)).toBeInTheDocument();
+    expect(screen.queryByText("one.txt")).not.toBeInTheDocument();
+  });
+
+  it("rejects an attachment over 10 MB inline", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    const oversized = new File([new Uint8Array(10 * 1024 * 1024 + 1)], "oversized.bin");
+    fireEvent.change(screen.getByLabelText("Supporting documents (optional)"), { target: { files: [oversized] } });
+
+    expect(screen.getByText(/oversized\.bin exceeds the 10 MB per-file limit/i)).toBeInTheDocument();
+  });
+
+  it("rejects attachments over the 25 MB combined limit", () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<MemoryRouter><GetStartedPage /></MemoryRouter>);
+    const nineMb = new Uint8Array(9 * 1024 * 1024);
+    fireEvent.change(screen.getByLabelText("Supporting documents (optional)"), { target: { files: [
+      new File([nineMb], "one.bin"),
+      new File([nineMb], "two.bin"),
+      new File([nineMb], "three.bin"),
+    ] } });
+
+    expect(screen.getByText(/combined file size cannot exceed 25 MB/i)).toBeInTheDocument();
   });
 
   it("makes every intake field visibly required except optional notes", () => {

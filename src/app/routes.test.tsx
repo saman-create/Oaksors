@@ -46,7 +46,10 @@ describe("Oaksors routed pages", () => {
     expect(form.querySelector("fieldset")).not.toBeDisabled();
     expect(screen.getByLabelText("SSN / Tax ID")).toHaveAttribute("type", "text");
     expect(screen.getByLabelText("SSN / Tax ID")).toBeRequired();
-    expect(document.querySelector('input[type="file"]')).toBeNull();
+    const attachments = screen.getByLabelText("Supporting documents (optional)");
+    expect(attachments).toHaveAttribute("type", "file");
+    expect(attachments).toHaveAttribute("multiple");
+    expect(attachments).not.toBeRequired();
   });
 
   it("routes every homepage Get Started Now CTA to the onboarding page", () => {

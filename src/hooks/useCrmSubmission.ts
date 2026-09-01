@@ -4,6 +4,12 @@ import { ApiError, submitCrmForm, type CrmEndpoint } from "@/services/crmApi";
 export type SubmissionPhase = "idle" | "submitting" | "success" | "duplicate" | "rate-limited" | "error";
 
 function stableSerialize(value: unknown): string {
+  if (typeof File !== "undefined" && value instanceof File) {
+    return stableSerialize({ name: value.name, size: value.size, type: value.type, lastModified: value.lastModified });
+  }
+  if (typeof FormData !== "undefined" && value instanceof FormData) {
+    return stableSerialize(Array.from(value.entries()));
+  }
   if (Array.isArray(value)) return `[${value.map(stableSerialize).join(",")}]`;
   if (value && typeof value === "object") return `{${Object.entries(value as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => `${JSON.stringify(key)}:${stableSerialize(item)}`).join(",")}}`;
   return JSON.stringify(value);

@@ -13,9 +13,14 @@ export type SubmissionReceipt = { submission: { id: string; status: string }; re
 function isObject(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }
 
 export async function submitCrmForm<T extends object>(endpoint: CrmEndpoint, payload: T, idempotencyKey: string): Promise<SubmissionReceipt> {
+  const isMultipart = payload instanceof FormData;
   let response: Response;
   try {
-    response = await fetch(`${PUBLIC_API_BASE}/api/crm/${endpoint}`, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json", "Idempotency-Key": idempotencyKey }, body: JSON.stringify(payload) });
+    response = await fetch(`${PUBLIC_API_BASE}/api/crm/${endpoint}`, {
+      method: "POST",
+      headers: { Accept: "application/json", ...(!isMultipart ? { "Content-Type": "application/json" } : {}), "Idempotency-Key": idempotencyKey },
+      body: isMultipart ? payload : JSON.stringify(payload),
+    });
   } catch { throw new ApiError("We couldn't reach the submission service. Check your connection and try again."); }
   let data: unknown = null;
   try { data = await response.json(); } catch { /* safe status handling below */ }

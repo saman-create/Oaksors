@@ -41,6 +41,29 @@ describe("useCrmSubmission", () => {
     expect(result.current.fieldErrors).toEqual({ email: "Enter a valid email." });
   });
 
+  it("changes the idempotency key when multipart attachment metadata changes", async () => {
+    const requests: RequestInit[] = [];
+    vi.stubGlobal("fetch", vi.fn(async (_url: string, init: RequestInit) => {
+      requests.push(init);
+      return new Response(JSON.stringify({ error: { code: "server_error", message: "Try again" } }), { status: 500 });
+    }));
+    const { result } = renderHook(() => useCrmSubmission("retirement-intake-submissions"));
+    const first = new FormData();
+    first.append("payload", JSON.stringify(payload));
+    first.append("attachments", new File(["one"], "first.pdf", { type: "application/pdf", lastModified: 1 }));
+    const second = new FormData();
+    second.append("payload", JSON.stringify(payload));
+    second.append("attachments", new File(["two"], "second.pdf", { type: "application/pdf", lastModified: 2 }));
+
+    await act(() => result.current.submit(first));
+    await act(() => result.current.submit(first));
+    await act(() => result.current.submit(second));
+
+    const keys = requests.map((request) => (request.headers as Record<string, string>)["Idempotency-Key"]);
+    expect(keys[0]).toBe(keys[1]);
+    expect(keys[2]).not.toBe(keys[1]);
+  });
+
   it("distinguishes rate limiting so the UI can ask the visitor to wait", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: { code: "rate_limited", message: "Too many submissions" } }), { status: 429 })));
     const { result } = renderHook(() => useCrmSubmission("email-submissions"));

@@ -291,6 +291,36 @@ em { color: var(--mp-green); font-style: normal; }
   }
 }
 .mp-field-error { color: #913838; font-size: 12px; line-height: 1.45; }
+.mp-file-field { position: relative; display: flex; min-width: 0; flex-direction: column; gap: 10px; color: #394743; font-size: 13px; }
+.mp-file-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.mp-file-heading label { color: #394743; font-weight: 500; }
+.mp-file-heading label span, .mp-file-count { color: #697671; font-weight: 400; }
+.mp-file-count { flex: none; font-size: 12px; }
+.mp-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.mp-file-dropzone { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 96px; padding: 18px; border: 1px dashed #b9cbc5; border-radius: 10px; background: #f7faf9; transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.mp-file-dropzone:hover, .mp-file-dropzone.is-dragging { border-color: var(--mp-green-dark); background: rgb(30 186 151 / 6%); box-shadow: 0 10px 28px rgb(15 114 95 / 8%); }
+.mp-file-dropzone.is-dragging { transform: translateY(-2px); }
+.mp-file-dropzone.has-error { border-color: #a43d3d; background: #fffafa; }
+.mp-file-input:focus-visible + .mp-file-dropzone { outline: 3px solid rgb(30 186 151 / 22%); outline-offset: 2px; border-color: var(--mp-green-dark); }
+.mp-file-upload-icon, .mp-file-type-icon { display: grid; place-items: center; flex: none; color: var(--mp-green-dark); background: rgb(30 186 151 / 10%); }
+.mp-file-upload-icon { width: 46px; height: 46px; border-radius: 10px; }
+.mp-file-upload-icon svg { width: 23px; height: 23px; }
+.mp-file-drop-copy { min-width: 0; }
+.mp-file-drop-copy strong { display: block; color: #26342f; font-size: 14px; font-weight: 600; line-height: 1.35; }
+.mp-file-drop-copy p { margin: 4px 0 0; color: #697671; font-size: 12px; line-height: 1.45; }
+.mp-file-choose { min-height: 40px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; color: white; border-radius: 10px; background: var(--mp-green-dark); font-weight: 600; cursor: pointer; transition: background-color .2s ease, transform .2s ease; }
+.mp-file-choose:hover { background: var(--mp-green); transform: translateY(-1px); }
+.mp-file-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.mp-file-list li { display: grid; min-width: 0; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 12px; border: 1px solid #dce7e3; border-radius: 10px; background: white; }
+.mp-file-type-icon { width: 34px; height: 34px; border-radius: 8px; }
+.mp-file-type-icon svg { width: 17px; height: 17px; }
+.mp-file-details { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.mp-file-details strong { overflow: hidden; color: #26342f; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.mp-file-details small { color: #697671; font-size: 12px; }
+.mp-file-list button { display: grid; width: 36px; height: 36px; place-items: center; flex: none; padding: 0; color: #697671; border: 0; border-radius: 8px; background: transparent; cursor: pointer; transition: color .2s ease, background-color .2s ease; }
+.mp-file-list button svg { width: 17px; height: 17px; }
+.mp-file-list button:hover { color: #913838; background: rgb(145 56 56 / 8%); }
+.mp-file-list button:focus-visible { outline: 2px solid #913838; outline-offset: 2px; }
 .form-consent { display: flex; gap: 11px; align-items: flex-start; color: #52605c; font-size: 13px; line-height: 1.55; }
 .form-consent input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--mp-green-dark); }
 .form-consent a { color: var(--mp-green-dark); }
@@ -485,6 +515,10 @@ em { color: var(--mp-green); font-style: normal; }
   .mp-form-grid { grid-template-columns: 1fr; }
   .mp-field--full { grid-column: auto; }
   .mp-check-group > div { grid-template-columns: 1fr 1fr; }
+  .mp-file-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .mp-file-dropzone { grid-template-columns: auto minmax(0, 1fr); min-height: 0; padding: 16px; }
+  .mp-file-choose { grid-column: 1 / -1; width: 100%; margin-top: 2px; }
+  .mp-file-list li { padding: 10px; }
   .privacy-intro-grid { grid-template-columns: 1fr; gap: 22px; }
   .privacy-masthead { padding: 142px 0 58px; }
   .privacy-masthead .page-breadcrumb { margin-bottom: 30px; }

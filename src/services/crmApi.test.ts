@@ -13,6 +13,25 @@ describe("CRM API", () => {
     expect(fetchMock).toHaveBeenCalledWith("https://oaksorscrm.web.app/api/crm/email-submissions", expect.objectContaining({ method: "POST", headers: expect.objectContaining({ "Content-Type": "application/json", "Idempotency-Key": "request-123" }), body: JSON.stringify(payload) }));
   });
 
+  it("posts multipart retirement intake data without overriding the browser boundary", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ submission: { id: "retirement-1", status: "received" } }), { status: 201 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const body = new FormData();
+    body.append("payload", JSON.stringify({ firstName: "Jane" }));
+    body.append("attachments", new File(["statement"], "statement.pdf", { type: "application/pdf" }));
+
+    await submitCrmForm("retirement-intake-submissions", body, "multipart-key");
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://oaksorscrm.web.app/api/crm/retirement-intake-submissions",
+      expect.objectContaining({
+        method: "POST",
+        headers: { Accept: "application/json", "Idempotency-Key": "multipart-key" },
+        body,
+      }),
+    );
+  });
+
   it.each([[409, "duplicate"], [429, "rate_limited"], [500, "server_error"]])("preserves status %i and safe error code", async (status, code) => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code, message: "Safe message" }, requestId: "r1" }), { status })));
     await expect(submitCrmForm("email-submissions", payload, "key")).rejects.toMatchObject({ status, code });

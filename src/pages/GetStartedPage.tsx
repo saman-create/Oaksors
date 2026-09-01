@@ -1,10 +1,11 @@
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { PageHero } from "@/components/common/PageHero";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { FormField, TextAreaField } from "@/components/forms/FormField";
 import { DateOfBirthField } from "@/components/forms/DateOfBirthField";
 import { ConsentField } from "@/components/forms/ConsentField";
 import { FormStatus } from "@/components/forms/FormStatus";
+import { FileUploadField } from "@/components/forms/FileUploadField";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
 import type { RetirementIntakeSubmission } from "@/services/crmApi";
@@ -39,6 +40,7 @@ function formatSsnEntry(value: string) {
 
 export function GetStartedPage() {
   const submission = useCrmSubmission("retirement-intake-submissions");
+  const [attachments, setAttachments] = useState<File[]>([]);
   usePageMeta("Get Started | Oaksors", "Review the information needed to begin a precious-metals IRA conversation with Oaksors.");
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,11 +56,17 @@ export function GetStartedPage() {
     if (!accountTypes.length) { submission.setClientErrors({ accountTypes: "Select at least one account type." }); return; }
     const notes = String(data.get("notes") ?? "").trim();
     const payload: RetirementIntakeSubmission = { firstName: String(data.get("firstName") ?? "").trim(), lastName: String(data.get("lastName") ?? "").trim(), dob, ssn, phone: String(data.get("phone") ?? "").trim(), email: String(data.get("email") ?? "").trim(), address: String(data.get("address") ?? "").trim(), married: maritalStatus, portfolioValue: String(data.get("portfolioValue") ?? ""), accountTypes, ...(notes ? { notes } : {}), privacyConsent: true };
-    if (await submission.submit(payload)) form.reset();
+    const requestBody = new FormData();
+    requestBody.append("payload", JSON.stringify(payload));
+    attachments.forEach((file) => requestBody.append("attachments", file, file.name));
+    if (await submission.submit(requestBody)) {
+      form.reset();
+      setAttachments([]);
+    }
   }
   return (
     <main className="conversion-page">
-      <PageHero compact eyebrow="Get started" title={<>Prepare today. Move forward <em>with confidence.</em></>} description="Share the account information needed to begin a precious-metals IRA conversation. Never include a password or account statement in this form." />
+      <PageHero compact eyebrow="Get started" title={<>Prepare today. Move forward <em>with confidence.</em></>} description="Share the account information needed to begin a precious-metals IRA conversation. Never include passwords or other access credentials." />
 
       <section className="mp-section mp-section--soft start-form-section start-form-section--early">
         <div className="container">
@@ -100,6 +108,13 @@ export function GetStartedPage() {
                     <FormField label="Approximate portfolio value" name="portfolioValue" required error={submission.fieldErrors.portfolioValue}><select id="portfolioValue" name="portfolioValue" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.portfolioValue)} aria-describedby={submission.fieldErrors.portfolioValue ? "portfolioValue-error" : undefined}><option value="">Select a range</option><option value="under-100000">Under $100,000</option><option value="100000-250000">$100,000–$250,000</option><option value="250000-500000">$250,000–$500,000</option><option value="500000-1000000">$500,000–$1,000,000</option><option value="1000000-plus">$1,000,000+</option></select></FormField>
                     <fieldset className="mp-check-group mp-field--full" aria-required="true" aria-describedby={submission.fieldErrors.accountTypes ? "accountTypes-error" : undefined}><legend>Please select all account types that apply<span className="mp-required-mark" aria-hidden="true" /></legend><div>{accountTypes.map((type) => <label key={type}><input type="checkbox" name="accountTypes" value={type} /> {type}</label>)}</div>{submission.fieldErrors.accountTypes && <small id="accountTypes-error" className="mp-field-error">{submission.fieldErrors.accountTypes}</small>}</fieldset>
                     <TextAreaField label="Any other information you would like to provide (optional)" name="notes" maxLength={2000} error={submission.fieldErrors.notes} />
+                    <FileUploadField
+                      files={attachments}
+                      error={submission.fieldErrors.attachments}
+                      onChange={setAttachments}
+                      onError={(message) => submission.setClientErrors({ attachments: message })}
+                      onClearError={() => submission.clearFieldError("attachments")}
+                    />
                     <ConsentField error={submission.fieldErrors.privacyConsent} />
                   </div>
                   <FormStatus phase={submission.phase} />
