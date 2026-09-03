@@ -87,6 +87,12 @@ describe("HeroSection", () => {
     expect(screen.queryByRole("group", { name: "Hero version" })).not.toBeInTheDocument();
   });
 
+  it("keeps the investment landing link out of the homepage hero", () => {
+    renderHero();
+
+    expect(screen.queryByRole("link", { name: /invest with oaksors/i })).not.toBeInTheDocument();
+  });
+
   it("pans the original video background toward the mouse", () => {
     const animationFrames = installAnimationFrameQueue();
     const hero = renderHero();

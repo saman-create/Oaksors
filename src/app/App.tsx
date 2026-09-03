@@ -4,6 +4,7 @@ import { ArticlePage } from "@/pages/ArticlePage";
 import { ContactPage } from "@/pages/ContactPage";
 import { GetStartedPage } from "@/pages/GetStartedPage";
 import { HomePage } from "@/pages/HomePage";
+import { InvestPage } from "@/pages/InvestPage";
 import { NewsPage } from "@/pages/NewsPage";
 import { PreciousMetalsIraPage } from "@/pages/PreciousMetalsIraPage";
 import { PrivacyNoticePage } from "@/pages/PrivacyNoticePage";
@@ -14,6 +15,7 @@ export function App() {
       <Routes>
         <Route element={<SiteShell />}>
           <Route index element={<HomePage />} />
+          <Route path="invest" element={<InvestPage />} />
           <Route path="precious-metals-ira" element={<PreciousMetalsIraPage />} />
           <Route path="news" element={<NewsPage />} />
           <Route path="news/:slug" element={<ArticlePage />} />

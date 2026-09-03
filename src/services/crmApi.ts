@@ -3,11 +3,13 @@ import { PUBLIC_API_BASE } from "@/services/publicApiBase";
 
 export { ApiError } from "@/services/apiError";
 
-export type CrmEndpoint = "qualification-submissions" | "email-submissions" | "retirement-intake-submissions";
+export type CrmEndpoint = "qualification-submissions" | "email-submissions" | "retirement-intake-submissions" | "lead-submissions";
 
 export type QualificationSubmission = { firstName: string; lastName: string; phone: string; email: string; retired: "retired" | "not_retired"; dob: string; portfolio: string; concerns: string; sourcePage: "home" | "contact"; privacyConsent: true };
 export type EmailSubmission = { firstName: string; lastName: string; email: string; phone?: string; subject: string; message: string; sourcePage: "home" | "contact"; privacyConsent: true };
 export type RetirementIntakeSubmission = { firstName: string; lastName: string; dob: string; ssn: string; phone: string; email: string; address: string; married: "married" | "not_married" | "divorced" | "widowed"; portfolioValue: string; accountTypes: string[]; notes?: string; privacyConsent: true };
+export type LeadInterest = "precious_metals_ira" | "gold" | "silver" | "rollover_guidance" | "general_information";
+export type LeadSubmission = { firstName: string; lastName: string; email: string; phone: string; interest: LeadInterest; message?: string; sourcePage: "invest"; privacyConsent: true };
 export type SubmissionReceipt = { submission: { id: string; status: string }; requestId?: string };
 
 function isObject(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }

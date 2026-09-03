@@ -1,0 +1,177 @@
+.invest-page {
+  --invest-ink: #07110f;
+  --invest-paper: #fbfdfc;
+  color: var(--invest-ink);
+  background: var(--invest-paper);
+}
+
+.invest-page h1,
+.invest-page h2,
+.invest-page h3 { text-wrap: balance; }
+
+.invest-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 168px 0 82px;
+  color: white;
+  background: #06100e;
+}
+
+.invest-hero-video { position: absolute; z-index: -4; width: 100%; height: 100%; object-fit: cover; opacity: 1; filter: saturate(1.08) brightness(1.05); inset: 0; }
+.invest-hero-metals { position: absolute; z-index: -2; bottom: -4%; left: 39%; width: min(31vw, 490px); opacity: 1; filter: drop-shadow(0 24px 40px rgb(0 0 0 / 42%)); transform: translateX(-50%); }
+
+.invest-hero-grid { display: grid; grid-template-columns: minmax(0, .96fr) minmax(520px, .86fr); gap: clamp(56px, 7vw, 112px); align-items: center; }
+.invest-hero-copy { max-width: 680px; padding: 28px 0; filter: drop-shadow(0 8px 24px rgb(0 0 0 / 72%)); }
+.invest-hero-copy h1 { max-width: 660px; font-size: clamp(3rem, 5.6vw, 4.875rem); font-weight: 400; letter-spacing: -.04em; line-height: .98; }
+.invest-hero-copy > p { max-width: 580px; margin-top: 28px; color: rgb(235 245 241 / 74%); font-size: 1.1875rem; line-height: 1.55; }
+.invest-hero-points { display: grid; gap: 12px; margin-top: 31px; list-style: none; }
+.invest-hero-points li { display: flex; gap: 11px; align-items: center; color: rgb(245 251 249 / 88%); font-size: 1rem; }
+.invest-hero-points svg { width: 19px; height: 19px; flex: 0 0 auto; padding: 3px; color: #06100e; border-radius: 50%; background: var(--mp-green); fill: none; stroke: currentColor; stroke-width: 2; }
+.invest-inline-link { display: inline-flex; gap: 10px; align-items: center; font-weight: 500; text-decoration: none; }
+.invest-inline-link svg,
+.invest-submit-button svg,
+.invest-final-cta .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; transition: transform 220ms cubic-bezier(.16, 1, .3, 1); }
+.invest-inline-link:hover svg,
+.invest-submit-button:hover svg,
+.invest-final-cta .btn:hover svg { transform: translateX(4px); }
+
+.invest-form-card { position: relative; padding: clamp(28px, 3vw, 42px); border: 0; border-radius: 22px; box-shadow: 0 28px 70px rgb(0 0 0 / 32%); }
+.invest-form-card::before { position: absolute; top: 0; right: 42px; left: 42px; height: 3px; content: ""; background: var(--mp-green); }
+.invest-form-heading { margin-bottom: 22px; }
+.invest-form-heading h2 { margin-bottom: 9px; color: var(--mp-ink); font-size: clamp(2.25rem, 3vw, 3rem); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
+.invest-form-heading p { max-width: 48ch; color: #63706d; font-size: 1rem; line-height: 1.55; }
+.invest-form-card .mp-form-grid { gap: 17px 15px; margin-bottom: 24px; }
+.invest-form-card .mp-field input,
+.invest-form-card .mp-field select,
+.invest-form-card .mp-field textarea { background: #f5f8f7; }
+.invest-form-card .form-success { min-height: 590px; }
+.invest-submit-button { width: 100%; gap: 10px; }
+.invest-form-note { margin-top: 15px; color: var(--mp-ink-soft); font-size: .75rem; line-height: 1.5; text-align: center; }
+
+.invest-trust { padding: 28px 0; border-bottom: 1px solid var(--mp-line); background: white; }
+.invest-trust-inner { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 60px; align-items: center; }
+.invest-trust-inner > p { color: var(--mp-ink-soft); font-size: .75rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
+.invest-trust-logos { display: flex; gap: clamp(38px, 7vw, 92px); align-items: center; justify-content: flex-end; }
+.invest-trust-logos img { width: auto; max-width: 180px; height: 46px; object-fit: contain; transition: transform 260ms cubic-bezier(.16, 1, .3, 1); }
+.invest-trust-logos img:last-child { height: 54px; }
+.invest-trust-logos img:hover { transform: translateY(-3px) scale(1.025); }
+
+.invest-value { padding: 130px 0; background: var(--invest-paper); }
+.invest-value-grid { display: grid; grid-template-columns: minmax(0, .82fr) minmax(520px, 1.18fr); gap: clamp(70px, 10vw, 150px); align-items: start; }
+.invest-value-intro { position: sticky; top: 132px; }
+.invest-value-intro h2,
+.invest-process-heading h2,
+.invest-metals-copy h2,
+.invest-final-cta h2 { font-size: clamp(3rem, 5.6vw, 4.875rem); font-weight: 400; letter-spacing: -.04em; line-height: .98; }
+.invest-value-intro > p { max-width: 52ch; margin-top: 24px; color: #65726e; font-size: 1rem; line-height: 1.7; }
+.invest-inline-link { margin-top: 30px; color: var(--mp-green-dark); }
+.invest-value-list { border-top: 1px solid #cfdad6; }
+.invest-value-list article { display: grid; grid-template-columns: minmax(190px, .55fr) 1fr; gap: 34px; align-items: start; padding: 38px 0; border-bottom: 1px solid #cfdad6; }
+.invest-value-list h3 { font-size: 24px; font-weight: 500; letter-spacing: -.025em; line-height: 1.15; }
+.invest-value-list p { color: #697671; line-height: 1.65; }
+
+.invest-process { position: relative; isolation: isolate; overflow: hidden; padding: 130px 0 118px; color: white; background: #09110f; }
+.invest-process::after { position: absolute; z-index: -1; content: ""; background: rgb(3 11 9 / 46%); inset: 0; pointer-events: none; }
+.invest-process-background { position: absolute; z-index: -2; opacity: .98; inset: 0; }
+.invest-process-background .floating-lines-container { background: #07100e; }
+.invest-process-content { position: relative; z-index: 1; }
+.invest-process-heading { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .5fr); gap: 80px; align-items: end; margin-bottom: 80px; }
+.invest-process-heading h2 { max-width: 850px; }
+.invest-process-heading p { max-width: 44ch; color: rgb(227 240 235 / 63%); font-size: 1rem; line-height: 1.65; }
+.invest-process-list { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgb(255 255 255 / 16%); list-style: none; }
+.invest-process-list li { display: grid; min-height: 320px; padding: 32px clamp(28px, 3vw, 46px) 36px; align-content: space-between; border-right: 1px solid rgb(255 255 255 / 16%); }
+.invest-process-list li:first-child { border-left: 1px solid rgb(255 255 255 / 16%); }
+.invest-process-list > li > span { color: var(--mp-green); font-size: .8125rem; letter-spacing: .08em; }
+.invest-process-list h3 { max-width: 12ch; margin-bottom: 16px; font-size: clamp(1.5rem, 2.3vw, 3rem); font-weight: 400; letter-spacing: -.03em; line-height: 1.06; }
+.invest-process-list p { max-width: 35ch; color: rgb(227 240 235 / 58%); line-height: 1.65; }
+
+.invest-metals { padding: 130px 0; background: #f9fafb; }
+.invest-metals-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(430px, 1fr); gap: clamp(64px, 8vw, 110px); align-items: center; }
+.invest-metals-visual { position: relative; }
+.invest-metals-image-frame { overflow: hidden; padding: 12px; border-radius: 24px; background: rgb(30 186 151 / 10%); box-shadow: 0 20px 50px rgb(12 45 37 / 12%); }
+.invest-metals-image-frame img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid rgb(30 186 151 / 20%); border-radius: 16px; }
+.invest-metals-note { position: absolute; right: -26px; bottom: -28px; width: min(330px, 72%); padding: 22px 24px; color: white; border: 1px solid rgb(255 255 255 / 14%); border-radius: 15px; background: var(--mp-green-dark); box-shadow: 0 18px 40px rgb(4 67 51 / 22%); font-size: .9375rem; line-height: 1.55; }
+.invest-metals-details { margin-top: 30px; border-top: 1px solid var(--mp-line); }
+.invest-metals-details article { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; padding: 22px 0; border-bottom: 1px solid var(--mp-line); }
+.invest-metals-details article > span { color: rgb(30 186 151 / 48%); font-size: 28px; line-height: 1; }
+.invest-metals-details h3 { margin-bottom: 6px; font-size: 20px; font-weight: 500; letter-spacing: -.02em; }
+.invest-metals-details p { max-width: 54ch; color: #697671; font-size: 14px; line-height: 1.55; }
+
+.invest-final-cta { padding: 110px 0; color: white; background: var(--mp-green-dark); }
+.invest-final-cta-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .45fr) auto; gap: 50px; align-items: center; }
+.invest-final-cta h2 { max-width: 720px; }
+.invest-final-cta p { max-width: 38ch; color: rgb(239 253 248 / 76%); line-height: 1.65; }
+.invest-final-cta .btn { gap: 10px; color: #07110f; background: white; }
+
+.invest-page .scroll-reveal { opacity: 1; transform: none; transition: opacity 700ms cubic-bezier(.16, 1, .3, 1), transform 800ms cubic-bezier(.16, 1, .3, 1); }
+.invest-page .scroll-reveal:not(.visible) { opacity: 0; transform: translateY(26px); }
+.invest-page .invest-value-list article:nth-child(2),
+.invest-page .invest-process-list li:nth-child(2) { transition-delay: 90ms; }
+.invest-page .invest-value-list article:nth-child(3),
+.invest-page .invest-process-list li:nth-child(3) { transition-delay: 180ms; }
+
+@media (max-width: 1100px) {
+  .invest-hero { padding-top: 154px; }
+  .invest-hero-grid { grid-template-columns: minmax(0, .8fr) minmax(480px, 1fr); gap: 44px; }
+  .invest-hero-copy h1 { font-size: clamp(3rem, 5.6vw, 4.875rem); }
+  .invest-value-grid { grid-template-columns: .75fr 1.25fr; gap: 60px; }
+  .invest-value-list article { grid-template-columns: 1fr; gap: 13px; }
+  .invest-final-cta-inner { grid-template-columns: 1fr auto; }
+  .invest-final-cta p { grid-column: 1; }
+  .invest-final-cta .btn { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+@media (max-width: 900px) {
+  .invest-hero { min-height: auto; padding: 148px 0 72px; }
+  .invest-hero-grid { grid-template-columns: 1fr; }
+  .invest-hero-copy { max-width: 720px; padding-bottom: 0; }
+  .invest-hero-metals { top: 100px; right: -28%; bottom: auto; left: auto; width: 64vw; opacity: 1; transform: none; }
+  .invest-form-card { max-width: 720px; }
+  .invest-trust-inner { grid-template-columns: 1fr; gap: 20px; }
+  .invest-trust-logos { justify-content: flex-start; }
+  .invest-value-grid,
+  .invest-metals-grid { grid-template-columns: 1fr; }
+  .invest-value-intro { position: static; }
+  .invest-process-heading { grid-template-columns: 1fr; gap: 24px; }
+  .invest-process-list { grid-template-columns: 1fr; border-top: 0; }
+  .invest-process-list li { min-height: 0; grid-template-columns: 55px 1fr; gap: 26px; align-content: start; padding: 30px 0; border-top: 1px solid rgb(255 255 255 / 16%); border-right: 0; }
+  .invest-process-list li:first-child { border-left: 0; }
+}
+
+@media (max-width: 640px) {
+  .invest-hero { padding: 118px 0 54px; }
+  .invest-hero-copy h1 { font-size: clamp(3rem, 13vw, 4.875rem); }
+  .invest-hero-copy > p { margin-top: 22px; font-size: 16px; }
+  .invest-form-card { padding: 24px 18px 26px; }
+  .invest-form-card::before { right: 26px; left: 26px; }
+  .invest-form-card .mp-form-grid { grid-template-columns: 1fr; }
+  .invest-form-card .mp-field--full { grid-column: auto; }
+  .invest-form-card .form-success { min-height: 450px; }
+  .invest-trust { padding: 30px 0; }
+  .invest-trust-logos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; width: 100%; }
+  .invest-trust-logos img { width: 100%; max-width: 110px; height: 38px; }
+  .invest-trust-logos img:last-child { height: 44px; }
+  .invest-value,
+  .invest-process,
+  .invest-metals { padding: 88px 0; }
+  .invest-value-grid { gap: 58px; }
+  .invest-process-heading { margin-bottom: 45px; }
+  .invest-process-list li { grid-template-columns: 38px 1fr; gap: 18px; }
+  .invest-metals-image-frame { padding: 8px; border-radius: 18px; }
+  .invest-metals-image-frame img { border-radius: 12px; }
+  .invest-metals-note { position: relative; right: auto; bottom: auto; width: calc(100% - 32px); margin: -22px 16px 0; padding: 19px 20px; }
+  .invest-final-cta { padding: 84px 0; }
+  .invest-final-cta-inner { grid-template-columns: 1fr; gap: 24px; }
+  .invest-final-cta .btn { grid-column: 1; grid-row: auto; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invest-page .scroll-reveal,
+  .invest-trust-logos img,
+  .invest-inline-link svg,
+  .invest-submit-button svg,
+  .invest-final-cta .btn svg { transition: none; }
+  .invest-page .scroll-reveal:not(.visible) { opacity: 1; transform: none; }
+}

@@ -3,6 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, vi } from "vitest";
 import { App } from "./App";
 
+vi.mock("@/components/effects/FloatingLines", () => ({
+  default: () => null,
+}));
+
 function renderAt(path: string) {
   window.history.pushState({}, "", path);
   return render(<App />);
@@ -50,6 +54,13 @@ describe("Oaksors routed pages", () => {
     expect(attachments).toHaveAttribute("type", "file");
     expect(attachments).toHaveAttribute("multiple");
     expect(attachments).not.toBeRequired();
+  });
+
+  it("renders the dedicated investment lead page", () => {
+    renderAt("/invest/");
+
+    expect(screen.getByRole("heading", { level: 1, name: /a more tangible path for your retirement/i })).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: /request precious metals information/i })).toBeInTheDocument();
   });
 
   it("routes every homepage Get Started Now CTA to the onboarding page", () => {

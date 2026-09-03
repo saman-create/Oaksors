@@ -4,6 +4,7 @@ import { SocialLinks } from "@/components/common/SocialLinks";
 const quickLinks = [
   ["Home", "/"],
   ["Precious Metals IRA", "/precious-metals-ira/"],
+  ["Invest with Oaksors", "/invest/"],
   ["News", "/news/"],
   ["Contact Us", "/contact-us/"],
 ] as const;
