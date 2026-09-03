@@ -77,11 +77,6 @@ export function InvestPage() {
           <div className="invest-hero-copy">
             <h1>A more tangible path for your retirement.</h1>
             <p>Explore how eligible retirement savings can move into physical precious metals, with clear guidance at every step.</p>
-            <ul className="invest-hero-points" aria-label="How Oaksors can help">
-              <li><CheckIcon /> Rollover paperwork guidance</li>
-              <li><CheckIcon /> Custodian coordination</li>
-              <li><CheckIcon /> Physical gold and silver options</li>
-            </ul>
           </div>
 
           <div className="mp-form-card invest-form-card">
@@ -120,6 +115,12 @@ export function InvestPage() {
               </form>
             )}
           </div>
+
+          <ul className="invest-hero-points" aria-label="How Oaksors can help">
+            <li><CheckIcon /> Rollover paperwork guidance</li>
+            <li><CheckIcon /> Custodian coordination</li>
+            <li><CheckIcon /> Physical gold and silver options</li>
+          </ul>
         </div>
       </section>
 
