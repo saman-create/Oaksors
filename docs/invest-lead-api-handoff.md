@@ -18,22 +18,13 @@ Idempotency-Key: <unique-request-id>
   "lastName": "Doe",
   "email": "jane@example.com",
   "phone": "+15551234567",
-  "interest": "rollover_guidance",
   "message": "Please contact me in the afternoon.",
   "sourcePage": "invest",
   "privacyConsent": true
 }
 ```
 
-Required fields: `firstName`, `lastName`, `email`, `phone`, `interest`, `sourcePage`, and `privacyConsent`. `message` is optional. `sourcePage` must be `invest`.
-
-Accepted `interest` values:
-
-- `precious_metals_ira`
-- `gold`
-- `silver`
-- `rollover_guidance`
-- `general_information`
+Required fields: `firstName`, `lastName`, `email`, `phone`, `sourcePage`, and `privacyConsent`. `message` is optional. `sourcePage` must be `invest`.
 
 Please create a lead record in the CRM, enforce the idempotency key so repeated requests do not create duplicate leads, and apply the same validation, rate limiting, logging, and CORS rules used by the existing public CRM submission endpoints.
 

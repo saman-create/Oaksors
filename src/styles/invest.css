@@ -22,12 +22,12 @@
 .invest-hero-video { position: absolute; z-index: -4; width: 100%; height: 100%; object-fit: cover; opacity: 1; filter: saturate(1.08) brightness(1.05); inset: 0; }
 .invest-hero-metals { position: absolute; z-index: -2; bottom: -4%; left: 39%; width: min(31vw, 490px); opacity: 1; filter: drop-shadow(0 24px 40px rgb(0 0 0 / 42%)); transform: translateX(-50%); }
 
-.invest-hero-grid { display: grid; grid-template-areas: "copy form" "points form"; grid-template-columns: minmax(0, .96fr) minmax(520px, .86fr); column-gap: clamp(56px, 7vw, 112px); row-gap: 0; align-items: center; }
+.invest-hero-grid { display: grid; grid-template-areas: "copy form" "summary form" "points form"; grid-template-columns: minmax(0, .96fr) minmax(520px, .86fr); column-gap: clamp(56px, 7vw, 112px); row-gap: 0; align-items: center; }
 .invest-hero-copy { max-width: 680px; padding: 28px 0; filter: drop-shadow(0 8px 24px rgb(0 0 0 / 72%)); }
 .invest-hero-copy { grid-area: copy; }
 .invest-form-card { grid-area: form; }
 .invest-hero-copy h1 { max-width: 660px; font-size: clamp(3rem, 5.6vw, 4.875rem); font-weight: 400; letter-spacing: -.04em; line-height: .98; }
-.invest-hero-copy > p { max-width: 580px; margin-top: 28px; color: rgb(235 245 241 / 74%); font-size: 1.1875rem; line-height: 1.55; }
+.invest-hero-summary { grid-area: summary; max-width: 580px; margin-top: 28px; color: rgb(235 245 241 / 74%); font-size: 1.1875rem; line-height: 1.55; }
 .invest-hero-points { display: grid; grid-area: points; gap: 12px; margin-top: 31px; list-style: none; }
 .invest-hero-points li { display: flex; gap: 11px; align-items: center; color: rgb(245 251 249 / 88%); font-size: 1rem; }
 .invest-hero-points svg { width: 19px; height: 19px; flex: 0 0 auto; padding: 3px; color: #06100e; border-radius: 50%; background: var(--mp-green); fill: none; stroke: currentColor; stroke-width: 2; }
@@ -56,9 +56,11 @@
 .invest-trust-inner { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 60px; align-items: center; }
 .invest-trust-inner > p { color: var(--mp-ink-soft); font-size: .75rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
 .invest-trust-logos { display: flex; gap: clamp(38px, 7vw, 92px); align-items: center; justify-content: flex-end; }
+.invest-trust-logos a { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; outline-offset: 7px; }
 .invest-trust-logos img { width: auto; max-width: 180px; height: 46px; object-fit: contain; transition: transform 260ms cubic-bezier(.16, 1, .3, 1); }
-.invest-trust-logos img:last-child { height: 54px; }
-.invest-trust-logos img:hover { transform: translateY(-3px) scale(1.025); }
+.invest-trust-logos a:last-child img { height: 54px; }
+.invest-trust-logos a:hover img,
+.invest-trust-logos a:focus-visible img { transform: translateY(-3px) scale(1.025); }
 
 .invest-value { padding: 130px 0; background: var(--invest-paper); }
 .invest-value-grid { display: grid; grid-template-columns: minmax(0, .82fr) minmax(520px, 1.18fr); gap: clamp(70px, 10vw, 150px); align-items: start; }
@@ -127,9 +129,10 @@
 
 @media (max-width: 900px) {
   .invest-hero { min-height: auto; padding: 148px 0 72px; }
-  .invest-hero-grid { grid-template-areas: "copy" "form" "points"; grid-template-columns: 1fr; gap: 44px; }
+  .invest-hero-grid { grid-template-areas: "copy" "form" "summary" "points"; grid-template-columns: 1fr; gap: 44px; }
   .invest-hero-copy { max-width: 720px; padding-bottom: 0; }
   .invest-hero-metals { display: none; }
+  .invest-hero-summary { margin: 0 0 -20px; }
   .invest-hero-points { margin-top: 0; }
   .invest-form-card { max-width: 720px; }
   .invest-trust-inner { grid-template-columns: 1fr; gap: 20px; }
@@ -145,8 +148,8 @@
 
 @media (max-width: 640px) {
   .invest-hero { padding: 118px 0 54px; }
-  .invest-hero-copy h1 { font-size: clamp(3rem, 13vw, 4.875rem); }
-  .invest-hero-copy > p { margin-top: 22px; font-size: 16px; }
+  .invest-hero-copy h1 { font-size: clamp(2.5rem, 11vw, 3.25rem); }
+  .invest-hero-summary { font-size: 16px; }
   .invest-form-card { padding: 24px 18px 26px; }
   .invest-form-card::before { right: 26px; left: 26px; }
   .invest-form-card .mp-form-grid { grid-template-columns: 1fr; }
@@ -155,7 +158,7 @@
   .invest-trust { padding: 30px 0; }
   .invest-trust-logos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; width: 100%; }
   .invest-trust-logos img { width: 100%; max-width: 110px; height: 38px; }
-  .invest-trust-logos img:last-child { height: 44px; }
+  .invest-trust-logos a:last-child img { height: 44px; }
   .invest-value,
   .invest-process,
   .invest-metals { padding: 88px 0; }

@@ -5,12 +5,10 @@ import { FormStatus } from "@/components/forms/FormStatus";
 import { useCrmSubmission } from "@/hooks/useCrmSubmission";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import type { LeadInterest, LeadSubmission } from "@/services/crmApi";
+import type { LeadSubmission } from "@/services/crmApi";
 import "@/styles/invest.css";
 
 const FloatingLines = lazy(() => import("@/components/effects/FloatingLines"));
-
-const leadInterests = ["precious_metals_ira", "gold", "silver", "rollover_guidance", "general_information"] as const;
 
 const valueItems = [
   { title: "Understand the option", text: "Learn how a precious-metals IRA works, what may be eligible, and where the key decisions sit." },
@@ -23,10 +21,6 @@ const processSteps = [
   { title: "Speak with a specialist", text: "Have a direct conversation about your goals, account type, and the practical details involved." },
   { title: "Review your next steps", text: "If the approach fits, you will know which conversations and documents come next—without pressure." },
 ];
-
-function isLeadInterest(value: string): value is LeadInterest {
-  return leadInterests.some((interest) => interest === value);
-}
 
 function ArrowIcon() {
   return <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 6l4 4-4 4" /></svg>;
@@ -45,11 +39,6 @@ export function InvestPage() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    const interest = String(data.get("interest") ?? "");
-    if (!isLeadInterest(interest)) {
-      submission.setClientErrors({ interest: "Select what you would like to explore." });
-      return;
-    }
 
     const message = String(data.get("message") ?? "").trim();
     const payload: LeadSubmission = {
@@ -57,7 +46,6 @@ export function InvestPage() {
       lastName: String(data.get("lastName") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
-      interest,
       ...(message ? { message } : {}),
       sourcePage: "invest",
       privacyConsent: true,
@@ -76,7 +64,6 @@ export function InvestPage() {
         <div className="container invest-hero-grid">
           <div className="invest-hero-copy">
             <h1>A more tangible path for your retirement.</h1>
-            <p>Explore how eligible retirement savings can move into physical precious metals, with clear guidance at every step.</p>
           </div>
 
           <div className="mp-form-card invest-form-card">
@@ -95,16 +82,6 @@ export function InvestPage() {
                     <FormField label="Last name" name="lastName" autoComplete="family-name" required error={submission.fieldErrors.lastName} />
                     <FormField label="Email address" name="email" type="email" autoComplete="email" required error={submission.fieldErrors.email} />
                     <FormField label="Cell phone" name="phone" type="tel" autoComplete="tel" maxLength={30} required error={submission.fieldErrors.phone} />
-                    <FormField label="What would you like to explore?" name="interest" full required error={submission.fieldErrors.interest}>
-                      <select id="interest" name="interest" defaultValue="" required aria-invalid={Boolean(submission.fieldErrors.interest)} aria-describedby={submission.fieldErrors.interest ? "interest-error" : undefined}>
-                        <option value="">Select an option</option>
-                        <option value="precious_metals_ira">Precious metals IRA</option>
-                        <option value="rollover_guidance">Rollover guidance</option>
-                        <option value="gold">Physical gold</option>
-                        <option value="silver">Physical silver</option>
-                        <option value="general_information">General information</option>
-                      </select>
-                    </FormField>
                     <TextAreaField label="Anything else we should know? (optional)" name="message" rows={3} maxLength={2000} error={submission.fieldErrors.message} />
                     <ConsentField error={submission.fieldErrors.privacyConsent} />
                   </div>
@@ -115,6 +92,8 @@ export function InvestPage() {
               </form>
             )}
           </div>
+
+          <p className="invest-hero-summary">Explore how eligible retirement savings can move into physical precious metals, with clear guidance at every step.</p>
 
           <ul className="invest-hero-points" aria-label="How Oaksors can help">
             <li><CheckIcon /> Rollover paperwork guidance</li>
@@ -128,9 +107,15 @@ export function InvestPage() {
         <div className="container invest-trust-inner">
           <p>Trusted by industry leaders</p>
           <div className="invest-trust-logos">
-            <img src="/assets/images/delaware-depository.webp" alt="Delaware Depository" />
-            <img src="/assets/images/veteran.png" alt="Veteran Owned Business" />
-            <img src="/assets/images/trustpilot.png" alt="Trustpilot" />
+            <a href="https://delawaredepository.com/about-delaware-depository/our-services/ira-services/" target="_blank" rel="noreferrer" aria-label="Delaware Depository IRA Services">
+              <img src="/assets/images/delaware-depository.webp" alt="Delaware Depository" />
+            </a>
+            <a href="https://www.sba.gov/federal-contracting/contracting-assistance-programs/veteran-contracting-assistance-programs" target="_blank" rel="noreferrer" aria-label="SBA veteran-owned business programs">
+              <img src="/assets/images/veteran.png" alt="Veteran Owned Business" />
+            </a>
+            <a href="https://www.trustpilot.com/review/oaksorsllc.com" target="_blank" rel="noreferrer" aria-label="Oaksors Trustpilot reviews">
+              <img src="/assets/images/trustpilot.png" alt="Trustpilot" />
+            </a>
           </div>
         </div>
       </section>

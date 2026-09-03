@@ -35,7 +35,6 @@ describe("InvestPage", () => {
     await user.type(screen.getByLabelText("Last name"), "Doe");
     await user.type(screen.getByLabelText("Email address"), "jane@example.com");
     await user.type(screen.getByLabelText("Cell phone"), "+15551234567");
-    await user.selectOptions(screen.getByLabelText("What would you like to explore?"), "rollover_guidance");
     await user.type(screen.getByLabelText("Anything else we should know? (optional)"), "Please contact me in the afternoon.");
     await user.click(screen.getByLabelText(/agree to the privacy notice/i));
     await user.click(screen.getByRole("button", { name: /request information/i }));
@@ -49,7 +48,6 @@ describe("InvestPage", () => {
       lastName: "Doe",
       email: "jane@example.com",
       phone: "+15551234567",
-      interest: "rollover_guidance",
       message: "Please contact me in the afternoon.",
       sourcePage: "invest",
       privacyConsent: true,
@@ -68,7 +66,6 @@ describe("InvestPage", () => {
     await user.type(screen.getByLabelText("Last name"), "Doe");
     await user.type(screen.getByLabelText("Email address"), "jane@example.com");
     await user.type(screen.getByLabelText("Cell phone"), "123");
-    await user.selectOptions(screen.getByLabelText("What would you like to explore?"), "gold");
     await user.click(screen.getByLabelText(/agree to the privacy notice/i));
     await user.click(screen.getByRole("button", { name: /request information/i }));
 
